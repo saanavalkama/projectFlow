@@ -1,6 +1,7 @@
 import axios from "axios";
+import { env } from "../../../config/env";
 
-const API_URL = "http://localhost:3001/projects"
+const API_URL = `${env.apiBaseUrl}/projects`
 
 export const projectServices = {
 

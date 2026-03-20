@@ -2,12 +2,13 @@
 import express from 'express'
 import projectRoutes from './modules/projects/project_routes.js'
 import cors from 'cors'
+import { env } from './config/env.js'
 
 
 export const app = express()
 
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: env.CLIENT_ORIGIN
 }))
 
 app.use(express.json())
