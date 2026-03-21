@@ -30,7 +30,7 @@ async function startServer() {
         process.on('SIGTERM', shutdown)
        
     } catch (error) {
-        console.error('Error connecting to the database:', error)
+        console.error('Error during server startup:', error)
         process.exit(1)
     }
 }
