@@ -34,7 +34,7 @@ export default function ProjectForm(){
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label htmlFor="name">Name</label>
-                    <input id="name" {...register("name"),{required: true}} />
+                    <input id="name" {...register("name", { required: true })} />
                 </div>
                 <div>
                     <label htmlFor="description">Description</label>

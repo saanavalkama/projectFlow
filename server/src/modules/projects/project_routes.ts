@@ -6,6 +6,7 @@ const router = Router()
 
 router.post("/", projectController.createProject)
 router.get("/", projectController.getAllProjects)
+router.delete("/:id", projectController.deleteProject)
 
 export default router
 

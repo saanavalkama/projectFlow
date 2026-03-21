@@ -1,7 +1,13 @@
-import { create } from "node:domain";
 import { prisma } from "../../lib/prisma.js";
 
 export const projectRepository = {
+    deleteProject: async (id: string) => {
+        return await prisma.project.delete({
+            where: {
+                id
+            }
+        })
+    },
     createProject: async (name: string, description: string) => {
         return await prisma.project.create({
             data: {
@@ -16,5 +22,6 @@ export const projectRepository = {
                 createdAt: 'desc'
             }
         })
-    }
+    },
+    
 }

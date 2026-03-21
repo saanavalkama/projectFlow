@@ -6,5 +6,8 @@ export const projectServices = {
     },
     getAllProjects: async () => {
         return await projectRepository.getAllProjects()
+    },
+    deleteProject: async (id: string) => {
+        return await projectRepository.deleteProject(id)
     }
 }

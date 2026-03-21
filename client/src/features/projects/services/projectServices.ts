@@ -9,8 +9,13 @@ export const projectServices = {
             return response.data
         
     },
+
     getAllProjects: async () : Promise<Project[]> => {
         const response = await api.get<Project[]>("/projects")
         return response.data
+    },
+
+    deleteProject: async (id: string): Promise<void> => {
+        return api.delete(`/projects/${id}`)
     }
 }
