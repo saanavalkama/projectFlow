@@ -15,6 +15,8 @@ export default function ProjectForm(){
         mutationFn: (data: NewProject) => projectServices.createProject(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['projects'] })
+            reset()
+            dispatch(closeAddProject())
         }
     })
 
@@ -22,12 +24,7 @@ export default function ProjectForm(){
     const { register, handleSubmit, reset } = useForm<NewProject>();
 
     const onSubmit: SubmitHandler<NewProject> = data => {
-        mutate(data, {
-            onSuccess: () => {       
-                reset()     
-                dispatch(closeAddProject())    
-           }
-        })
+        mutate(data)
     }
 
     return (
@@ -37,7 +34,7 @@ export default function ProjectForm(){
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label htmlFor="name">Name</label>
-                    <input id="name" {...register("name")} />
+                    <input id="name" {...register("name"),{required: true}} />
                 </div>
                 <div>
                     <label htmlFor="description">Description</label>

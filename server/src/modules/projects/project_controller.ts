@@ -6,7 +6,7 @@ export const projectController = {
         
         const { name, description } = req.body
 
-        if (!name || name.trim() === "" || typeof name !== "string") {
+        if (!name || typeof name === 'string' || name.trim() === '') {
             return res.status(400).json({ error: 'Project name is required and must be a non-empty string' })
         }
 
@@ -18,7 +18,7 @@ export const projectController = {
             res.status(500).json({ error: 'Failed to create project' })
         }  
     },
-    getAllProjects: async (req: Request, res: Response) => {
+    getAllProjects: async (_req: Request, res: Response) => {
         
         try {
             const projects = await projectServices.getAllProjects()

@@ -3,7 +3,7 @@ export interface Project{
     name: string;
     description?: string;
     createdAt: string;
-    updatedAt?: string;
+    updatedAt: string;
 }
 
 export interface NewProject{
