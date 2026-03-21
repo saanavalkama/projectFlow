@@ -5,6 +5,11 @@ export const projectController = {
     createProject: async (req: Request, res: Response ) => {
         
         const { name, description } = req.body
+
+        if (!name || name.trim() === "" || typeof name !== "string") {
+            return res.status(400).json({ error: 'Project name is required and must be a non-empty string' })
+        }
+
         try {
             const project = await projectServices.createProject(name, description)
             res.status(201).json(project)

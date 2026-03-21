@@ -1,10 +1,11 @@
 import {api} from "../../../lib/api";
-import type { Project } from "../types/types";
+import type { Project, NewProject } from "../types/types";
+
 
 export const projectServices = {
 
-    createProject: async (name: string, description: string) : Promise<Project> => {
-            const response = await api.post("/projects", { name, description })
+    createProject: async (data: NewProject) : Promise<Project> => {
+            const response = await api.post("/projects", data)
             return response.data
         
     },

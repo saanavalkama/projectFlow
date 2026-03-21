@@ -4,11 +4,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query'
 import { projectServices } from '../services/projectServices'
 import { useAppDispatch } from '../../../app/hooks'
 import { closeAddProject } from '../../ui/uiSlice'
-
-interface IFormInput {
-    name: string;
-    description: string;
-}
+import type { NewProject } from '../types/types'
 
 export default function ProjectForm(){
 
@@ -16,16 +12,16 @@ export default function ProjectForm(){
     const dispatch = useAppDispatch()
 
     const { mutate, isPending, isError } = useMutation({
-        mutationFn: (data: IFormInput) => projectServices.createProject(data.name, data.description),
+        mutationFn: (data: NewProject) => projectServices.createProject(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['projects'] })
         }
     })
 
 
-    const { register, handleSubmit, reset } = useForm<IFormInput>();
+    const { register, handleSubmit, reset } = useForm<NewProject>();
 
-    const onSubmit: SubmitHandler<IFormInput> = data => {
+    const onSubmit: SubmitHandler<NewProject> = data => {
         mutate(data, {
             onSuccess: () => {       
                 reset()     
