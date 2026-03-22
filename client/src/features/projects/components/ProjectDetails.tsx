@@ -1,9 +1,6 @@
-import { useParams } from "react-router-dom"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useParams, useNavigate,Link } from "react-router-dom"
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query"
 import { projectServices } from "../services/projectServices"
-import { Link } from "react-router-dom"
-import { useMutation } from "@tanstack/react-query"
-import { useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import type { RootState } from "../../../app/store"
 import { openEditProject } from "../../ui/uiSlice"
@@ -19,7 +16,7 @@ export default function ProjectDetails(){
 
     //fetch project 
     const { data: project, isPending, error } = useQuery({
-        queryKey: ['project',id  ],
+        queryKey: ['project',id],
         queryFn: () => {
             if(!id) throw new Error("Project ID is required")
             return projectServices.getProjectById(id)
@@ -39,26 +36,35 @@ export default function ProjectDetails(){
     })
 
     
+
+    
     if(isPending) return <div>Loading...</div>
 
     if(error) return <div>{error.message}</div>
+
+    if(!project) return <div>Project not found</div>
+
+    const handleDeleteProject = () => {
+        const confirmed = window.confirm(`Delete project "${project.name}"?`)
+        if (!confirmed) return
+        deleteProject(project.id)
+    }
 
 
     return(
         <div>
             <Link to="/projects">Back to Projects</Link>
             {!isEditProjectOpen && (<>
-                <h2>{project?.name}</h2>
-                <p>{project?.description}</p>
+                <h2>{project.name}</h2>
+                <p>{project.description}</p>
                 <button
                     onClick={()=>dispatch(openEditProject())}
-                    disabled={isEditProjectOpen} 
                 >
                     Edit Project
                 </button>
                 <button
                     disabled={deletePending}
-                    onClick={()=>deleteProject(project?.id)}
+                    onClick={handleDeleteProject}
                 >
                     {deletePending ? "Deleting..." : "Delete Project"}
                 </button>

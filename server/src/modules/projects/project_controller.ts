@@ -43,15 +43,13 @@ export const projectController = {
         }
 
         try{
-            const deletedCount = await projectServices.deleteProject(id)
-
-            if (deletedCount === 0) {
-                return res.status(404).json({ error: 'Project not found' })
-            }
-
+            await projectServices.deleteProject(id)            
             res.status(204).send()
         }
-        catch(error){
+        catch(error:any){
+            if (error.code === 'P2025') {
+                return res.status(404).json({ error: 'Project not found' })
+            }
             console.error('Error deleting project:', error)
             res.status(500).json({ error: 'Failed to delete project' })
         }
