@@ -23,6 +23,8 @@ async function startServer() {
                 await prisma.$disconnect()
                 process.exit(0)
                 
+
+    
             })
         }
 

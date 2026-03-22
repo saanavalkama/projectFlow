@@ -8,6 +8,16 @@ export const projectServices = {
         return await projectRepository.getAllProjects()
     },
     deleteProject: async (id: string) => {
-        return await projectRepository.deleteProject(id)
+        const deletedCount = await projectRepository.deleteProject(id)
+        return deletedCount
+    },
+    updateProject: async (id: string, name: string, description: string) => {
+        return await projectRepository.updateProject(id, name, description)
+    },
+    getProjectById: async (id: string) => {
+        return await projectRepository.getProjectById(id)
     }
 }
+
+
+

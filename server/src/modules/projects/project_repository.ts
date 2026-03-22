@@ -2,11 +2,13 @@ import { prisma } from "../../lib/prisma.js";
 
 export const projectRepository = {
     deleteProject: async (id: string) => {
-        return await prisma.project.delete({
+        const res = await prisma.project.deleteMany({
             where: {
                 id
             }
         })
+        
+        return res.count
     },
     createProject: async (name: string, description: string) => {
         return await prisma.project.create({
@@ -23,5 +25,23 @@ export const projectRepository = {
             }
         })
     },
+    updateProject: async (id: string, name: string, description: string) => {
+        return await prisma.project.update({
+            where: {
+                id
+            },
+            data: {
+                name,
+                description
+            }
+        })
+    },
+    getProjectById: async(id:string) => {
+        return await prisma.project.findUnique({
+            where: {
+                id
+            }
+        })
+    }
     
 }
