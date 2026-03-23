@@ -5,6 +5,7 @@ import { projectServices } from "../services/projectServices"
 import { useAppDispatch } from "../../../app/hooks"
 import { closeEditProject } from "../../ui/uiSlice"
 
+
 type EditProjectFormProps = {
     project: Project
 }
@@ -61,6 +62,11 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
                     {isPending ? 'Updating...' : 'Update Project'}
                 </button>
             </form>
+            <button 
+                onClick={() => dispatch(closeEditProject())}
+            >
+                Close
+            </button>
         </div>
     )
 }

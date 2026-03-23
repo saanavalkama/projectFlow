@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import type { RootState } from "../../../app/store"
 import { openEditProject } from "../../ui/uiSlice"
 import { EditProjectForm } from "./EditProjectForm"
+import TaskList from "../../tasks/components/TaskList"
 
 export default function ProjectDetails(){
 
@@ -68,6 +69,7 @@ export default function ProjectDetails(){
                 >
                     {deletePending ? "Deleting..." : "Delete Project"}
                 </button>
+                <TaskList projectId={project.id} />
             </>)}
             {isEditProjectOpen && <EditProjectForm project={project} />}
         </div>
