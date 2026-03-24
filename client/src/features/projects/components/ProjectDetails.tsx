@@ -1,4 +1,4 @@
-import { useParams, useNavigate,Link } from "react-router-dom"
+import { useNavigate,Link } from "react-router-dom"
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query"
 import { projectServices } from "../services/projectServices"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
@@ -7,9 +7,12 @@ import { openEditProject } from "../../ui/uiSlice"
 import { EditProjectForm } from "./EditProjectForm"
 import TaskList from "../../tasks/components/TaskList"
 
-export default function ProjectDetails(){
+type ProjectDetailProps = {
+    projectId: string | undefined
+}
 
-    const { id } = useParams()
+export default function ProjectDetails({projectId}:ProjectDetailProps){
+
     const queryClient = useQueryClient()
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
@@ -17,12 +20,12 @@ export default function ProjectDetails(){
 
     //fetch project 
     const { data: project, isPending, error } = useQuery({
-        queryKey: ['project',id],
+        queryKey: ['project',projectId],
         queryFn: () => {
-            if(!id) throw new Error("Project ID is required")
-            return projectServices.getProjectById(id)
+            if(!projectId) throw new Error("Project ID is required")
+            return projectServices.getProjectById(projectId)
         },
-        enabled: !!id
+        enabled: !!projectId
     })
 
     const { mutate: deleteProject, isPending: deletePending } = useMutation({
@@ -32,7 +35,7 @@ export default function ProjectDetails(){
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['projects'] })
-            navigate("/projects")
+            navigate("/workspace")
         }
     })
 
@@ -42,6 +45,8 @@ export default function ProjectDetails(){
     if(isPending) return <div>Loading...</div>
 
     if(error) return <div>{error.message}</div>
+
+    if(!projectId) return <div>Click project to see details</div>
 
     if(!project) return <div>Project not found</div>
 
@@ -54,7 +59,6 @@ export default function ProjectDetails(){
 
     return(
         <div>
-            <Link to="/projects">Back to Projects</Link>
             {!isEditProjectOpen && (<>
                 <h2>{project.name}</h2>
                 <p>{project.description}</p>
