@@ -46,14 +46,51 @@ body {
 .project-sidebar li{
   list-style: none;
   background-color: bisque;
-  height: 40px;
   display: flex;
   align-items: center;
   margin: 2px;
-  padding: 0px 12px;
+  padding: 12px 12px;
 }
 
 .project-sidebar button{
   padding: 10px;
   margin: 4px; 
+}
+
+.project-detail{
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  justify-content: center;
+}
+
+.project-detail-button-group{
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
+.project-detail-button-group button{
+  padding: 10px;
+  width: 250px;
+}
+
+.add-task-form{
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  justify-content: center;
+
+}
+
+button{
+  padding: 10px;
+  width: 220px;
+  margin:4px;
+}
+
+.task-list li{
+  list-style: none;
+  padding: 10px 12px;
+  background-color: aquamarine;
+  margin: 1px;
+  
+
 }

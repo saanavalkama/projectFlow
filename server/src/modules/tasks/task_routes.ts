@@ -7,5 +7,6 @@ router.get("/projects/:projectId/tasks", taskController.getTasksByProjectId)
 router.post("/projects/:projectId/tasks", taskController.createTask)
 router.put("/tasks/:id", taskController.updateTask)
 router.delete("/tasks/:id", taskController.deleteTask)
+router.get("/tasks/:id", taskController.getTaskById)
 
 export default router

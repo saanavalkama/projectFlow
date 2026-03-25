@@ -8,5 +8,8 @@ export const taskServices = {
 
     createTask: async (projectId: string, title: string, details: string) => {
         return await taskRepository.createTask(projectId, title, details)
+    },
+    getTaskById: async(id:string) => {
+        return await taskRepository.getTaskById(id)
     }
 }

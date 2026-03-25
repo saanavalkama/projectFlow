@@ -18,5 +18,12 @@ export const taskRepository = {
                 details
             }
         })
+    },
+    getTaskById: async (id: string) => {
+        return await prisma.task.findUnique({
+            where:{
+                id
+            }
+        })
     }
 }

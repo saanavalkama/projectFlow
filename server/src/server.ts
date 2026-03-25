@@ -8,6 +8,7 @@ const PORT = env.PORT
 
 async function startServer() {
 
+
     try{
         await prisma.$connect()
         console.log('Connected to the database successfully.')
@@ -22,9 +23,6 @@ async function startServer() {
             server.close(async() => {
                 await prisma.$disconnect()
                 process.exit(0)
-                
-
-    
             })
         }
 

@@ -51,5 +51,25 @@ export const taskController = {
     },
     deleteTask: async(req: Request, res: Response) => {
         console.log("Deleting task with id:", req.params.id)
+    },
+    getTaskById: async(req:Request, res: Response) => {
+        
+        const {id} = req.params
+
+        if(!id || typeof id !== "string" ){
+            return res.status(400).json({error:"task id is required"})
+        }
+
+        try{
+            const task = await taskServices.getTaskById(id)
+            return res.status(200).json(task)
+        } catch(error:any){
+            console.error(error)
+            if(error.code === "P2025"){
+                return res.status(404).json({error:'message not found'})
+            }
+            return res.status(500).json({error: "Failed to get task by taks id"})
+        }
+
     }
 }

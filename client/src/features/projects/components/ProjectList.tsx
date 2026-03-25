@@ -10,16 +10,13 @@ export default function ProjectList() {
         queryFn: projectServices.getAllProjects
     })
 
-
     if (isPending) return <div>Loading...</div>
     if (isError) return <div>Error occurred while fetching projects.</div>
     if(!projects) return <div>no projects</div>
 
     return (
         <div>
-            <ul>
-            { projects?.map(ele => <ProjectListItem project={ele}/>)}
-            </ul>   
+            {projects?.map(ele => <ProjectListItem key={ele.id} project={ele} /> )}
         </div>
     )
 }

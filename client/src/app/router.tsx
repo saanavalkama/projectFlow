@@ -10,7 +10,7 @@ const router =  createBrowserRouter([
       {index: true, element: <h2>home page coming later</h2>},
       {path: "workspace", element: <Workspace />},
       {path: "workspace/:projectId", element:<Workspace />},
-      {path: "workspace/:projectId/tasks:taskId"},
+      {path: "workspace/:projectId/tasks/:taskId", element:<Workspace/>},
       {path: "*", element: <h2>404 - Not Found</h2>},
       
     ]

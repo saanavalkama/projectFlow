@@ -11,5 +11,10 @@ export const taskServices = {
     getTasksByProjectId: async (projectId: string) : Promise<Task[]> => {
         const response = await api.get<Task[]>(`/projects/${projectId}/tasks`)
         return response.data
+    }, 
+
+    getTaskById: async(id:string):Promise<Task> => {
+        const response = await api.get<Task>(`/tasks/${id}`)
+        return response.data
     }
 }
