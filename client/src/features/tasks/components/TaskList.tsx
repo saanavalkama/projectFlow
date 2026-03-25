@@ -26,7 +26,7 @@ export default function TaskList({ projectId }: TaskListProps) {
                 {tasks.map(task =>(
                 <li key={task.id}>
                     <NavLink to={`/workspace/${projectId}/tasks/${task.id}`}>
-                    {task.title}
+                    {task.title} {task.status}
                     </NavLink>
                 </li>))}
             </ul>

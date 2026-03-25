@@ -8,7 +8,7 @@ export interface Task{
     status: TaskStatus
 }
 
-type TaskStatus = "TODO" | "IN_PROGRESS" | "DONE"
+export type TaskStatus = "TODO" | "IN_PROGRESS" | "DONE"
 
 export interface NewTask{
     title: string;

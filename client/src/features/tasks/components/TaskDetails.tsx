@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { taskServices } from "../services/taskService"
+import TaskStatusPicker from "./TaskStatusPicker"
+import TaskDetailCard from "./TaskDetailCard"
 
 type TaskDetailProps = {
     taskId: string | undefined
@@ -25,9 +27,8 @@ export default function TaskDetails({taskId}:TaskDetailProps){
 
     return(
         <div>
-            <h2>{task.title}</h2>
-            <h4>{task.details}</h4>
-            <h4>{task.status}</h4>
+            <TaskDetailCard task={task}/>
+            <TaskStatusPicker status={task.status}/>
         </div>
     )
 }
