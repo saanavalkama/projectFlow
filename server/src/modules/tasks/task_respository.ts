@@ -1,7 +1,8 @@
+import { TaskStatus } from "../../generated/prisma/enums.js";
 import { prisma } from "../../lib/prisma.js";
     
 export const taskRepository = {
-    
+
     getTasksByProjectId: async(projectId: string) => {
         return await prisma.task.findMany({
             where: {
@@ -23,6 +24,18 @@ export const taskRepository = {
         return await prisma.task.findUnique({
             where:{
                 id
+            }
+        })
+    },
+
+
+    updateTaskStatus: async(id:string, status:TaskStatus) => {
+        return await prisma.task.update({
+            where:{
+                id
+            },
+            data:{
+                status
             }
         })
     }

@@ -9,7 +9,7 @@ type TaskListProps = {
 
 export default function TaskList({ projectId }: TaskListProps) {
 
-    
+
     const { data: tasks, isPending, error } = useQuery({
         queryKey: ['tasks', projectId],
         queryFn: () => taskServices.getTasksByProjectId(projectId)

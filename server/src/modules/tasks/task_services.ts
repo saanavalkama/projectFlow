@@ -1,7 +1,8 @@
+import { TaskStatus } from "../../generated/prisma/enums.js";
 import { taskRepository } from "./task_respository.js";
 
 export const taskServices = {
-    
+
     getTasksByProjectId: async (projectId: string) => {
         return await taskRepository.getTasksByProjectId(projectId)
     },
@@ -11,5 +12,9 @@ export const taskServices = {
     },
     getTaskById: async(id:string) => {
         return await taskRepository.getTaskById(id)
+    },
+
+    updateTaskStatus: async(id:string, status: TaskStatus)=>{
+        return await taskRepository.updateTaskStatus(id, status)
     }
 }
