@@ -41,6 +41,7 @@ export default function TaskStatusPicker({status, id, projectId} :TaskStatusPick
             <div className="task-status-group">
                 {statuses.map(({value,label})=>
                 <TaskStatusButton
+                  key={value}
                   status={value}
                   currentStatus={status}
                   isPending={isPending}

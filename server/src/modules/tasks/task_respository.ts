@@ -38,5 +38,13 @@ export const taskRepository = {
                 status
             }
         })
+    },
+
+    deleteTask: async(id:string) => {
+        return await prisma.task.delete({
+            where: {
+                id
+            }
+        })
     }
 }

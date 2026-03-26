@@ -12,10 +12,10 @@ export const taskController = {
 
         try {
             const tasks = await taskServices.getTasksByProjectId(projectId)
-            res.status(200).json(tasks)
+            return res.status(200).json(tasks)
         } catch (error) {
             console.error('Error fetching tasks:', error)
-            res.status(500).json({ error: 'Failed to fetch tasks' })
+            return res.status(500).json({ error: 'Failed to fetch tasks' })
         }
     },
 
@@ -41,15 +41,13 @@ export const taskController = {
 
         try {
             const task = await taskServices.createTask(projectId, trimmedTitle, trimmedDetails)
-            res.status(201).json(task)
+            return res.status(201).json(task)
         } catch (error) {
             console.error('Error creating task:', error)
-            res.status(500).json({ error: 'Failed to create task' })
+            return res.status(500).json({ error: 'Failed to create task' })
         }
     },
     updateTask: async(req: Request, res: Response) => {
-
-        //frontend sending both id and status in body. Maybe tighten the logic
 
         const {id} = req.params
         const {status} = req.body
@@ -59,7 +57,7 @@ export const taskController = {
         }
 
         if(typeof status !== "string" || !Object.values(TaskStatus).includes(status as TaskStatus)){
-            res.status(400).json({error:'valid task status is required' })
+            return res.status(400).json({error:'valid task status is required' })
         }
 
         const validStatus = status as TaskStatus
@@ -68,16 +66,32 @@ export const taskController = {
             const updatedTask = await taskServices.updateTaskStatus(id, validStatus)
             return res.status(200).json(updatedTask)
         } catch (error:any){
-            if(error.code = "P2025"){
+            if(error.code === "P2025"){
                 return res.status(404).json({error:'Task not found'})
             }
-            res.status(500).json({error: "failed to create task"})
+            return res.status(500).json({error: "failed to update task"})
         }
 
 
     },
     deleteTask: async(req: Request, res: Response) => {
-        console.log("Deleting task with id:", req.params.id)
+    
+        const {id} = req.params
+
+        if(!id || typeof id !== "string"){
+            return res.status(400).json({error:'id is required'})
+        }
+
+        try{
+            await taskServices.deleteTask(id)
+            res.status(204).send()
+        } catch(error:any) {
+            console.error(error)
+            if(error.code === "P2025"){
+                return res.status(404).json({error:'task resource not found'})
+            }
+            return res.status(500).json({error: "failed to delete task"})
+        }
     },
     getTaskById: async(req:Request, res: Response) => {
         
@@ -89,13 +103,13 @@ export const taskController = {
 
         try{
             const task = await taskServices.getTaskById(id)
+            if(!task){
+                return res.status(404).json({error:'no task found with that id'})
+            }
             return res.status(200).json(task)
         } catch(error:any){
             console.error(error)
-            if(error.code === "P2025"){
-                return res.status(404).json({error:'message not found'})
-            }
-            return res.status(500).json({error: "Failed to get task by taks id"})
+            return res.status(500).json({error: "Failed to get task by task id"})
         }
 
     }
