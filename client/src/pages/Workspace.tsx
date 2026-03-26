@@ -11,7 +11,7 @@ export default function Workspace(){
         <div className="workspace">
             <ProjectSidebar/>
             <ProjectDetails projectId={projectId} />
-            <TaskDetails taskId={taskId} />
+            <TaskDetails taskId={taskId} projectId={projectId} />
         </div>
     )
 }

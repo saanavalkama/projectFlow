@@ -5,9 +5,10 @@ import TaskDetailCard from "./TaskDetailCard"
 
 type TaskDetailProps = {
     taskId: string | undefined
+    projectId: string | undefined 
 }
 
-export default function TaskDetails({taskId}:TaskDetailProps){
+export default function TaskDetails({taskId,projectId}:TaskDetailProps){
 
     const {data:task, isPending, isError} = useQuery({
         queryKey:['task',taskId],
@@ -19,6 +20,7 @@ export default function TaskDetails({taskId}:TaskDetailProps){
 
     })
 
+
     if(!taskId) return <div>click task to show details</div>
 
     if(isPending) return <div>Loading</div>
@@ -28,7 +30,11 @@ export default function TaskDetails({taskId}:TaskDetailProps){
     return(
         <div>
             <TaskDetailCard task={task}/>
-            <TaskStatusPicker status={task.status}/>
+            <TaskStatusPicker 
+              status={task.status}
+              id={task.id}
+              projectId={projectId}
+            />
         </div>
     )
 }

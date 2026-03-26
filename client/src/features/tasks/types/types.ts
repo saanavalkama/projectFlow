@@ -16,3 +16,7 @@ export interface NewTask{
     projectId: string;
 }
 
+export interface UpdateTaskStatusInput{
+    id:string,
+    status: TaskStatus
+}

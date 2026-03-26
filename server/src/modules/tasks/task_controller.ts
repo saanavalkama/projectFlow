@@ -49,7 +49,7 @@ export const taskController = {
     },
     updateTask: async(req: Request, res: Response) => {
 
-        console.log("request")
+        //frontend sending both id and status in body. Maybe tighten the logic
 
         const {id} = req.params
         const {status} = req.body
