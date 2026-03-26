@@ -77,7 +77,23 @@ export const taskController = {
 
     },
     deleteTask: async(req: Request, res: Response) => {
-        console.log("Deleting task with id:", req.params.id)
+    
+        const {id} = req.params
+
+        if(!id || typeof id !== "string"){
+            return res.json(400).json({error:'id is required'})
+        }
+
+        try{
+            await taskServices.deleteTask(id)
+            res.status(204).send()
+        } catch(error:any) {
+            console.error(error)
+            if(error.code === "P2025"){
+                return res.status(404).json({error:'task resource not found'})
+            }
+            res.status(500).json({error: "failed to delete task"})
+        }
     },
     getTaskById: async(req:Request, res: Response) => {
         

@@ -16,5 +16,9 @@ export const taskServices = {
 
     updateTaskStatus: async(id:string, status: TaskStatus)=>{
         return await taskRepository.updateTaskStatus(id, status)
+    },
+    
+    deleteTask: async(id:string) => {
+        return await taskRepository.deleteTask(id)
     }
 }
