@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express'
 import { taskServices } from './task_services.js'
+import { TaskStatus } from '../../generated/prisma/enums.js'
 
 export const taskController = {
     getTasksByProjectId: async(req: Request, res: Response) => {
@@ -47,7 +48,33 @@ export const taskController = {
         }
     },
     updateTask: async(req: Request, res: Response) => {
-        console.log("Updating task with data:", req.body)
+
+        console.log("request")
+
+        const {id} = req.params
+        const {status} = req.body
+
+        if(!id || typeof id !== "string"){
+            return res.status(400).json({error:'task id is required'})
+        }
+
+        if(typeof status !== "string" || !Object.values(TaskStatus).includes(status as TaskStatus)){
+            res.status(400).json({error:'valid task status is required' })
+        }
+
+        const validStatus = status as TaskStatus
+
+        try{
+            const updatedTask = await taskServices.updateTaskStatus(id, validStatus)
+            return res.status(200).json(updatedTask)
+        } catch (error:any){
+            if(error.code = "P2025"){
+                return res.status(404).json({error:'Task not found'})
+            }
+            res.status(500).json({error: "failed to create task"})
+        }
+
+
     },
     deleteTask: async(req: Request, res: Response) => {
         console.log("Deleting task with id:", req.params.id)
