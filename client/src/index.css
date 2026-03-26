@@ -106,14 +106,14 @@ button{
   box-shadow: 1px 2px 5px black;
 }
 
-.inprogress-button{
+.in_progress-button{
   background-color: rgb(58, 58, 130);
   opacity: 0.5;
   border: none;
   color: white;
 }
 
-.inprogress-button--active{
+.in_progress-button--active{
   opacity: 1;
   border: 3px solid black;
   box-shadow: 1px 2px 5px black;

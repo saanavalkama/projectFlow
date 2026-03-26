@@ -1,5 +1,5 @@
 import {api} from "../../../lib/api";
-import type { Task, NewTask, TaskStatus, UpdateTaskStatusInput } from "../types/types";
+import type { Task, NewTask, UpdateTaskStatusInput } from "../types/types";
 
 export const taskServices = {
 

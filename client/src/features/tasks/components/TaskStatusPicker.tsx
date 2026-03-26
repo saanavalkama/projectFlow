@@ -2,6 +2,7 @@ import type {TaskStatus} from "../types/types"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { taskServices } from "../services/taskService"
 import type { UpdateTaskStatusInput } from "../types/types"
+import TaskStatusButton from "./TaskStatusButton"
 
 type TaskStatusPickerProps = {
     status: TaskStatus
@@ -21,30 +22,32 @@ export default function TaskStatusPicker({status, id, projectId} :TaskStatusPick
         }
     })
 
+    const handleUpdateStatus = (status:TaskStatus) => {
+        updateStatus({id, status})
+    }
+
+    if(isError) return <div>something went wrong while updating the task status</div>
+
+    const statuses : {value: TaskStatus, label: string}[] = [
+        {value: "TODO", label: "To do"},
+        {value: "IN_PROGRESS", label: "In progress"},
+        {value: "DONE", label:"Done"}
+    ]
+
     
     return(
         <div>
             <h3>Check status</h3>
             <div className="task-status-group">
-                <button 
-                  className={`todo-button ${status === "TODO" ? "todo-button--active" : ""}`}
-                  onClick={()=>updateStatus({id, status: "TODO"})}
-                  disabled={status === "TODO"}
-                >
-                  To do
-                </button>
-                <button
-                  className={`inprogress-button ${status === "IN_PROGRESS" ? "inprogress-button--active" : ""}`}
-                  onClick={()=>updateStatus({id, status: "IN_PROGRESS"})}
-                  disabled={status === "IN_PROGRESS"}
-                >
-                  In progress
-                </button>
-                <button
-                  className={`done-button ${status === "DONE" ? "done-button--active" : ""}`}
-                  onClick={()=>updateStatus({id, status:"DONE"})}
-                  disabled={status === "DONE"}
-                >Done</button>
+                {statuses.map(({value,label})=>
+                <TaskStatusButton
+                  status={value}
+                  currentStatus={status}
+                  isPending={isPending}
+                  onClick={()=>handleUpdateStatus(value)}
+                  label={label}
+                />
+                )}
             </div>
         </div>
     )    
