@@ -4,6 +4,7 @@ import type { Project, NewProject } from "../types/types";
 
 export const projectServices = {
 
+
     createProject: async (data: NewProject) : Promise<Project> => {
             const response = await api.post<Project>("/projects", data)
             return response.data
@@ -11,6 +12,7 @@ export const projectServices = {
     },
 
     getAllProjects: async () : Promise<Project[]> => {
+        console.log(api)
         const response = await api.get<Project[]>("/projects")
         return response.data
     },

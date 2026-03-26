@@ -1,5 +1,5 @@
 import {api} from "../../../lib/api";
-import type { Task, NewTask } from "../types/types";
+import type { Task, NewTask, UpdateTaskStatusInput } from "../types/types";
 
 export const taskServices = {
 
@@ -10,6 +10,16 @@ export const taskServices = {
 
     getTasksByProjectId: async (projectId: string) : Promise<Task[]> => {
         const response = await api.get<Task[]>(`/projects/${projectId}/tasks`)
+        return response.data
+    }, 
+
+    getTaskById: async(id:string):Promise<Task> => {
+        const response = await api.get<Task>(`/tasks/${id}`)
+        return response.data
+    }, 
+
+    updateTaskStatus: async(data: UpdateTaskStatusInput):Promise<Task> => {
+        const response = await api.put<Task>(`/tasks/${data.id}`,data)
         return response.data
     }
 }

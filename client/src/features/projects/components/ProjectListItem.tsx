@@ -1,5 +1,6 @@
 import type { Project } from "../types/types"
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
+
 
 type ProjectItemProps = {
     project: Project
@@ -8,9 +9,8 @@ type ProjectItemProps = {
 export default function ProjectItem({ project }: ProjectItemProps) {
 
     return (
-        <div>
-            <h3>{project.name}</h3>
-            <Link to={`/projects/${project.id}`}>View Details</Link>
-        </div>
+        <li>
+            <NavLink to={`/workspace/${project.id}`}>{project.name}</NavLink>
+        </li>
     )
 }

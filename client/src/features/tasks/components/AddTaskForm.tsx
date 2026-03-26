@@ -4,11 +4,11 @@ import { useMutation } from "@tanstack/react-query"
 import { taskServices } from "../services/taskService"
 import { useQueryClient } from "@tanstack/react-query"
 import type { NewTask } from "../types/types"
-import { closeAddTask } from "../../ui/uiSlice"
-import { useAppDispatch } from "../../../app/hooks"
+
 
 type AddTaskFormProps = {
-    projectId: string
+    projectId: string,
+    setIsTaskFormOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 type TaskFormInputs = {
@@ -16,11 +16,10 @@ type TaskFormInputs = {
     details: string
 }
 
-export default function AddTaskForm({projectId}:AddTaskFormProps){
+export default function AddTaskForm({projectId, setIsTaskFormOpen}:AddTaskFormProps){
 
     const {register, handleSubmit, reset} = useForm<TaskFormInputs>()
     const queryClient = useQueryClient()
-    const dispatch = useAppDispatch()
 
     const {mutate: createTask, isPending, isError} = useMutation({
         mutationFn: (data:NewTask) => taskServices.createTask(data),
@@ -39,9 +38,11 @@ export default function AddTaskForm({projectId}:AddTaskFormProps){
     }
     
     return(
-        <div>
-            <h2>Add task</h2>
-            {isError && <div>Error while creating the task</div>}
+        <div className="add-task-form">
+            <div>
+                <h2>Add task</h2>
+                {isError && <div>Error while creating the task</div>}
+            </div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label htmlFor="title">Title</label>
@@ -59,7 +60,7 @@ export default function AddTaskForm({projectId}:AddTaskFormProps){
             </form>
             <button
               disabled={isPending}
-              onClick={()=>dispatch(closeAddTask())}
+              onClick={()=>setIsTaskFormOpen(false)}
             >
                 Back to project view
             </button>

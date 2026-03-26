@@ -87,9 +87,6 @@ export const projectController = {
     },
     getProjectById: async (req: Request, res: Response) => {
 
-        console.log("new request to getProjectById with params")
-
-    
         const { id } = req.params
 
         

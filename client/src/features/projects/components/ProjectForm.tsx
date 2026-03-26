@@ -2,21 +2,22 @@ import {useForm} from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
 import {useMutation, useQueryClient} from '@tanstack/react-query'
 import { projectServices } from '../services/projectServices'
-import { useAppDispatch } from '../../../app/hooks'
-import { closeAddProject } from '../../ui/uiSlice'
 import type { NewProject } from '../types/types'
 
-export default function ProjectForm(){
+type ProjectFormProps = {
+    setIsProjectFormOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function ProjectForm({setIsProjectFormOpen}:ProjectFormProps){
 
     const queryClient = useQueryClient()
-    const dispatch = useAppDispatch()
-
+    
     const { mutate, isPending, isError } = useMutation({
         mutationFn: (data: NewProject) => projectServices.createProject(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['projects'] })
             reset()
-            dispatch(closeAddProject())
+            setIsProjectFormOpen(false)
         }
     })
 
