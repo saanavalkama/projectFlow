@@ -26,6 +26,7 @@ export default function TaskDetails({taskId,projectId}:TaskDetailProps){
     const {mutate:deleteTask, isPending: isDeletePending, isError: isDeleteError} = useMutation({
         mutationFn:(id:string) => taskServices.deleteTask(id),
         onSuccess:()=>{
+            queryClient.removeQueries({queryKey:['task',taskId]})
             queryClient.invalidateQueries({queryKey:['tasks',projectId]})
             navigate(`/workspace/${projectId}`)
         }
