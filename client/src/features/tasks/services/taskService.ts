@@ -21,5 +21,10 @@ export const taskServices = {
     updateTaskStatus: async(data: UpdateTaskStatusInput):Promise<Task> => {
         const response = await api.put<Task>(`/tasks/${data.id}`,data)
         return response.data
+    },
+
+    deleteTask: async(id:string):Promise<void> => {
+        return await api.delete(`/tasks/${id}`)
+        
     }
 }
