@@ -1,11 +1,10 @@
-import { useQuery } from "@tanstack/react-query"
-import { projectServices } from "../services/projectServices"
 import { useState } from "react"
 import ProjectDetailCard from "./ProjectDetailCard"
 import TaskList from "../../tasks/components/TaskList"
 import AddTaskForm from "../../tasks/components/AddTaskForm"
 import EditProjectForm  from "./EditProjectForm"
 import ProjectDetailButtonGroup from "./ProjectDetailButtonGroup"
+import { useProject } from "../hooks/useProject"
 
 
 type ProjectDetailProps = {
@@ -17,22 +16,13 @@ export default function ProjectDetails({projectId}:ProjectDetailProps){
     const [isAddTaskOpen, setIsAddTaskOpen] = useState<boolean>(false)
     const [isEditProjectOpen, setIsEditProjectOpen] = useState<boolean>(false)
 
-    //fetch project 
-    const { data: project, isPending, error } = useQuery({
-        queryKey: ['project',projectId],
-        queryFn: () => {
-            if(!projectId) throw new Error("Project ID is required")
-            return projectServices.getProjectById(projectId)
-        },
-        enabled: !!projectId
-    })
-
+    const {data: project, isPending, isError} = useProject(projectId)
 
     if(!projectId) return <div>Click project to see details</div>
 
     if(isPending) return <div>Loading...</div>
 
-    if(error) return <div>{error.message}</div>
+    if(isError) return <div>Error fetching the project</div>
 
     if(!project) return <div>Project not found</div>
 
