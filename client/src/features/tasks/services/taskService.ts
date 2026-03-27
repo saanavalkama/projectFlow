@@ -3,8 +3,8 @@ import type { Task, NewTask, UpdateTaskStatusInput } from "../types/types";
 
 export const taskServices = {
 
-    createTask: async (data: NewTask) : Promise<Task> => {
-            const response = await api.post<Task>(`/projects/${data.projectId}/tasks`, data)
+    createTask: async (projectId:string, data: NewTask) : Promise<Task> => {
+            const response = await api.post<Task>(`/projects/${projectId}/tasks`, data)
             return response.data
     },
 

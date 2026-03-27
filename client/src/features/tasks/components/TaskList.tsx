@@ -1,7 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
-import { taskServices } from "../services/taskService"
 import { NavLink } from "react-router-dom"
-
+import { useTasks } from "../hooks/useTaskQueries"
 
 type TaskListProps = {
     projectId: string
@@ -9,12 +7,8 @@ type TaskListProps = {
 
 export default function TaskList({ projectId }: TaskListProps) {
 
-
-    const { data: tasks, isPending, error } = useQuery({
-        queryKey: ['tasks', projectId],
-        queryFn: () => taskServices.getTasksByProjectId(projectId)
-    })
-
+    const {data: tasks, isPending, error} = useTasks(projectId)
+    
     if(isPending) return<div>Loading tasks...</div>
     if(error) return <div>Error occurred while fetching tasks: {error.message}</div>
     if(!tasks || tasks.length === 0) return <div>No tasks found for this project.</div>

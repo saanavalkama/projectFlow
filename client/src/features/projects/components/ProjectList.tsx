@@ -1,5 +1,3 @@
-import { useQuery } from "@tanstack/react-query"
-import { projectServices } from "../services/projectServices"
 import ProjectListItem from "./ProjectListItem"
 import { useProjects } from "../hooks/useProjects"
 

@@ -30,8 +30,6 @@ export default function ProjectDetails({projectId}:ProjectDetailProps){
 
     if(isEditProjectOpen) return <EditProjectForm project={project} setIsEditProjectOpen={setIsEditProjectOpen}/>
 
-    
-
     return(
         <div className="project-detail">
             <ProjectDetailCard project={project}/>
