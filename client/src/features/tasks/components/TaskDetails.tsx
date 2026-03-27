@@ -27,7 +27,7 @@ export default function TaskDetails({taskId,projectId}:TaskDetailProps){
         })
     }
 
-    if(!projectId) return <div>sommething went wrong</div>
+    if(!projectId) return <div>something went wrong</div>
 
     if(!taskId) return <div>click task to show details</div>
 

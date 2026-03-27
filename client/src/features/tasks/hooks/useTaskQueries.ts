@@ -12,7 +12,7 @@ export const useTasks = (projectId:string) => {
 export const useTask = (taskId:string | undefined) => {
     return useQuery({
         queryKey:['task', taskId],
-        queryFn:()=> taskServices.getTaskById(taskId!),
+        queryFn:()=> taskServices.getTaskById(taskId as string),
         enabled: !!taskId
     })
 }

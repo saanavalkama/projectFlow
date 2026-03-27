@@ -35,7 +35,7 @@ export const useDeleteTask = () => {
     return useMutation({
         mutationFn: (data:DeleteTaskInput)=>taskServices.deleteTask(data.id),
         onSuccess:(_,{projectId, id})=>{
-            queryClient.invalidateQueries({queryKey:['task',id]})
+            queryClient.removeQueries({queryKey:['task',id]})
             queryClient.invalidateQueries({queryKey:['tasks',projectId]})
         }
     })
