@@ -1,9 +1,7 @@
 import { useForm } from "react-hook-form"
 import type { SubmitHandler } from "react-hook-form"
-import { useMutation } from "@tanstack/react-query"
-import { taskServices } from "../services/taskService"
-import { useQueryClient } from "@tanstack/react-query"
 import type { NewTask } from "../types/types"
+import { useCreateTask } from "../hooks/useTaskMutations"
 
 
 type AddTaskFormProps = {
@@ -11,30 +9,21 @@ type AddTaskFormProps = {
     setIsTaskFormOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type TaskFormInputs = {
-    title: string,
-    details: string
-}
+
 
 export default function AddTaskForm({projectId, setIsTaskFormOpen}:AddTaskFormProps){
 
-    const {register, handleSubmit, reset} = useForm<TaskFormInputs>()
-    const queryClient = useQueryClient()
+    const {register, handleSubmit, reset} = useForm<NewTask>()
 
-    const {mutate: createTask, isPending, isError} = useMutation({
-        mutationFn: (data:NewTask) => taskServices.createTask(data),
-        onSuccess:()=> {
-            queryClient.invalidateQueries({queryKey:["tasks",projectId]})
-            reset()
-        }
-    })
+    const {mutate:createTask, isPending, isError} = useCreateTask()
 
-    const onSubmit: SubmitHandler<TaskFormInputs> = (data) => {
-        const payload = {
-            ...data,
-            projectId
-        }
-        createTask(payload)
+    const onSubmit: SubmitHandler<NewTask> = (data) => {
+        createTask({projectId, data}, {
+            onSuccess:()=>{
+                setIsTaskFormOpen(false)
+                reset()
+            }
+        })
     }
     
     return(

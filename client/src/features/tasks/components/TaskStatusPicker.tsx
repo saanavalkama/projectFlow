@@ -1,29 +1,19 @@
 import type {TaskStatus} from "../types/types"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { taskServices } from "../services/taskService"
-import type { UpdateTaskStatusInput } from "../types/types"
 import TaskStatusButton from "./TaskStatusButton"
+import { useUpdateTaskStatus } from "../hooks/useTaskMutations"
 
 type TaskStatusPickerProps = {
     status: TaskStatus
     id: string
-    projectId: string | undefined
+    projectId: string 
 }
 
 export default function TaskStatusPicker({status, id, projectId} :TaskStatusPickerProps){
 
-    const queryClient = useQueryClient()
-
-    const {mutate: updateStatus, isPending, isError} = useMutation({
-        mutationFn:(data: UpdateTaskStatusInput) => taskServices.updateTaskStatus(data),
-        onSuccess:()=> {
-            queryClient.invalidateQueries({queryKey:['task',id]})
-            queryClient.invalidateQueries({queryKey:['tasks', projectId]})
-        }
-    })
+   const {mutate: changeStatus, isPending, isError} = useUpdateTaskStatus()
 
     const handleUpdateStatus = (status:TaskStatus) => {
-        updateStatus({id, status})
+        changeStatus({projectId, id, status})
     }
 
     if(isError) return <div>something went wrong while updating the task status</div>

@@ -26,8 +26,9 @@ export const projectServices = {
         return response.data
     },
 
-    updateProject: async (id: string, data: {name: string, description: string}): Promise<Project> => {
-        const response = await api.put<Project>(`/projects/${id}`, data)
+    updateProject: async (id: string, data: {name: string, description?: string}): Promise<Project> => {
+        const payload = {...data, description: data.description ?? ""}
+        const response = await api.put<Project>(`/projects/${id}`, payload)
         return response.data
     }
 }

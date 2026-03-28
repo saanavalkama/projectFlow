@@ -1,46 +1,31 @@
-import type { Project } from "../types/types"
+import type { NewProject, Project } from "../types/types"
 import {useForm} from "react-hook-form"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { projectServices } from "../services/projectServices"
-
-
+import { useEditProject } from "../hooks/useProjectMutations"
 
 type EditProjectFormProps = {
     project: Project,
     setIsEditProjectOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type EditProjectData = {
-    name: string
-    description: string
-}
-
 export default function EditProjectForm({ project, setIsEditProjectOpen }: EditProjectFormProps) {
 
-    const {register, handleSubmit, formState: {errors}} = useForm<EditProjectData>({
+    const {register, handleSubmit, formState: {errors}, reset} = useForm<NewProject>({
         defaultValues: {
             name: project.name,
             description: project.description ?? ""
         }
     })
 
-    const queryClient = useQueryClient()
+    const {mutate: updateProject, isPending, isError} = useEditProject()
     
-
-    const {mutate: updateProject, isPending, isError} = useMutation({
-        mutationFn: (data: EditProjectData) => projectServices.updateProject(project.id, data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['project', project.id] })
-            queryClient.invalidateQueries({ queryKey: ['projects'] })
+    const onSubmit = (data: NewProject) => {
+        updateProject({id: project.id, data},{
+          onSuccess: () => {
             setIsEditProjectOpen(false)
-            
+            reset()
         }
-    })
-
-    const onSubmit = (data: EditProjectData) => {
-        updateProject(data)
+        })
     }
-
 
     return (
         <div className="add-task-form">
