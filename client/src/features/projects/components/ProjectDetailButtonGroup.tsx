@@ -1,5 +1,3 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { projectServices } from "../services/projectServices"
 import { useNavigate } from "react-router-dom"
 import { useDeleteProject } from "../hooks/useProjectMutations"
 
@@ -27,6 +25,7 @@ export default function ProjectDetailButtonGroup({setIsAddTaskOpen, setIsEditPro
 
     return(
         <div className="project-detail-button-group">
+            {isError && <div>Error while deleting project</div>}
             <button onClick={()=>setIsAddTaskOpen(true)}>Add Task</button>
             <button onClick={()=>setIsEditProjectOpen(true)}>Edit Project</button>
             <button
