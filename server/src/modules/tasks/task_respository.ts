@@ -3,12 +3,9 @@ import { prisma } from "../../lib/prisma.js";
     
 export const taskRepository = {
 
-    getTasksByProjectId: async(projectId: string) => {
-        return await prisma.task.findMany({
-            where: {
-                projectId
-            }
-        })
+    getTasksByProjectId: async(projectId: string, status?:TaskStatus) => {
+        const where = status ? {projectId, status} : {projectId}
+        return prisma.task.findMany({where})
     },
 
     createTask: async (projectId: string, title: string, details: string) => {

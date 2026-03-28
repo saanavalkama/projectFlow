@@ -3,8 +3,14 @@ import { taskRepository } from "./task_respository.js";
 
 export const taskServices = {
 
-    getTasksByProjectId: async (projectId: string) => {
-        return await taskRepository.getTasksByProjectId(projectId)
+    getTasksByProjectId: async (projectId: string, status?:string) => {
+
+        if(status !== undefined && !Object.values(TaskStatus).includes(status as TaskStatus)){
+            throw new Error("malformatted status")
+        }
+        const validStatus = status ? status as TaskStatus : undefined
+
+        return await taskRepository.getTasksByProjectId(projectId, validStatus)
     },
 
     createTask: async (projectId: string, title: string, details: string) => {

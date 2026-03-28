@@ -24,7 +24,6 @@ export default function TaskStatusPicker({status, id, projectId} :TaskStatusPick
         {value: "DONE", label:"Done"}
     ]
 
-    
     return(
         <div>
             <h3>Check status</h3>

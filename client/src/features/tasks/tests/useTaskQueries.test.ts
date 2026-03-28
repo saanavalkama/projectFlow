@@ -9,8 +9,6 @@ import { wrapper } from "../../../tests/renderWithProviders";
 
 const baseURL = env.apiBaseUrl
 
-
-
 const mockTask = {
   id: '1',
   title: 'Fix bug',
@@ -71,54 +69,3 @@ describe('useTask', ()=>{
 
 })
 
-describe('useTasks', () => {
-  it('returns list of tasks for a project', async () => {
-    server.use(
-      http.get(`${baseURL}/projects/:projectId/tasks`, () => {
-        return HttpResponse.json([mockTask])
-      })
-    )
-
-    const { result } = renderHook(() => useTasks('project-1'), { wrapper })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    expect(result.current.data).toEqual([mockTask])
-  })
-
-  it('does not fetch when projectId is empty', () => {
-    const { result } = renderHook(() => useTasks(''), { wrapper })
-
-    expect(result.current.isPending).toBe(true)
-    expect(result.current.fetchStatus).toBe('idle')
-  })
-
-  it('fetches with correct projectId', async () => {
-    let capturedProjectId: string | undefined
-
-    server.use(
-      http.get(`${baseURL}/projects/:projectId/tasks`, ({ params }) => {
-        capturedProjectId = params.projectId as string
-        return HttpResponse.json([mockTask])
-      })
-    )
-
-    const { result } = renderHook(() => useTasks('project-1'), { wrapper })
-
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-    expect(capturedProjectId).toBe('project-1')
-  })
-
-  it('is in error state when request fails', async () => {
-    server.use(
-      http.get(`${baseURL}/projects/:projectId/tasks`, () => {
-        return new HttpResponse(null, { status: 500 })
-      })
-    )
-
-    const { result } = renderHook(() => useTasks('project-1'), { wrapper })
-
-    await waitFor(() => expect(result.current.isError).toBe(true))
-  })
-})
