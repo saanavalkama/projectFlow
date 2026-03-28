@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { projectServices } from "../services/projectServices"
 import { useNavigate } from "react-router-dom"
+import { useDeleteProject } from "../hooks/useProjectMutations"
 
 type ProjectDetailButtonGroupProps={
     setIsAddTaskOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -11,25 +12,18 @@ type ProjectDetailButtonGroupProps={
 export default function ProjectDetailButtonGroup({setIsAddTaskOpen, setIsEditProjectOpen, projectId}:ProjectDetailButtonGroupProps){
 
     const navigate = useNavigate()
-    const queryClient = useQueryClient()
-
-    const { mutate: deleteProject, isPending: deletePending } = useMutation({
-        mutationFn: (id:string) => {
-            if(!id) throw new Error("Project ID is required")
-            return projectServices.deleteProject(id)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['projects'] })
-            navigate("/workspace")
-        }
-    })
+    
+    const {mutate: deleteProject, isPending: deletePending, isError} = useDeleteProject()
 
     function handleDelete(){
         const confirmed = window.confirm("Do you want to delete the project")
         if(!confirmed) return 
-        deleteProject(projectId)
+        deleteProject(projectId, {
+            onSuccess:()=>{
+                navigate("/workspace")
+            }
+        })
     }
-
 
     return(
         <div className="project-detail-button-group">

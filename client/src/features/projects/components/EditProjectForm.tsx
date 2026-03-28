@@ -22,7 +22,7 @@ export default function EditProjectForm({ project, setIsEditProjectOpen }: EditP
         updateProject({id: project.id, data},{
           onSuccess: () => {
             setIsEditProjectOpen(false)
-            reset(data)
+            reset()
         }
         })
     }

@@ -24,8 +24,6 @@ export default function ProjectDetails({projectId}:ProjectDetailProps){
 
     if(isError) return <div>Error fetching the project</div>
 
-    if(!project) return <div>Project not found</div>
-
     if(isAddTaskOpen) return <AddTaskForm projectId={projectId} setIsTaskFormOpen={setIsAddTaskOpen}/>
 
     if(isEditProjectOpen) return <EditProjectForm project={project} setIsEditProjectOpen={setIsEditProjectOpen}/>

@@ -16,10 +16,7 @@ export const useCreateProject = () => {
 export const useEditProject = () => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: ({id,data}:{id:string, data: NewProject}) => projectServices.updateProject(id, {
-            ...data,
-            description: data.description ?? ""
-        }),
+        mutationFn: ({id,data}:{id:string, data: NewProject}) => projectServices.updateProject(id, data),
         onSuccess:(_,{id})=>{            
             queryClient.invalidateQueries({queryKey:['projects']})
             queryClient.invalidateQueries({queryKey:['project',id]})

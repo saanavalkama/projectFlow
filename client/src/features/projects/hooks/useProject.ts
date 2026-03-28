@@ -5,7 +5,7 @@ export const useProject = (id:string | undefined) => {
     return useQuery({
         queryKey:['project',id],
         queryFn: () => {
-            return projectServices.getProjectById(id!)
+            return projectServices.getProjectById(id as string)
         },
         enabled:!!id
     })
