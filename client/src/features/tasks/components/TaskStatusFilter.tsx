@@ -1,8 +1,8 @@
-import { useSearchParams } from "react-router-dom"
 import { useTaskFilter } from "../hooks/useTaskStatusFilter"
 
 export default function TaskStatusFilter(){
 
+    
     const {currentFilter, setFilter} = useTaskFilter()
     
     const filterOptions = [
@@ -12,7 +12,7 @@ export default function TaskStatusFilter(){
         {value: 'done', label: 'Done'}
     ]
 
-    function handleChange(event:React.ChangeEvent<HTMLSelectElement>){
+    function handleFilterChange(event:React.ChangeEvent<HTMLSelectElement>){
         const value = event.target.value
         setFilter(value)
     }
@@ -21,7 +21,7 @@ export default function TaskStatusFilter(){
         <div>
             <select
                 value={currentFilter}
-                onChange={handleChange}
+                onChange={handleFilterChange}
             >
                 {filterOptions.map(filter => (
                     <option key={filter.value} value={filter.value}>{filter.label}</option>
