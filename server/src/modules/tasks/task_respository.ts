@@ -1,10 +1,15 @@
+import { title } from "node:process";
 import { TaskStatus } from "../../generated/prisma/enums.js";
 import { prisma } from "../../lib/prisma.js";
     
 export const taskRepository = {
 
-    getTasksByProjectId: async(projectId: string, status?:TaskStatus) => {
-        const where = status ? {projectId, status} : {projectId}
+    getTasksByProjectId: async(projectId: string, status?:TaskStatus, search?: string) => {
+        const where = {
+            projectId,
+            ...(status && {status}),
+            ...(search && {title: {contains: search, mode: 'insensitive' as const}})
+        }
         return prisma.task.findMany({where})
     },
 

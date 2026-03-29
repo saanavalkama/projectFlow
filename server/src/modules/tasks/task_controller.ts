@@ -5,7 +5,7 @@ import { TaskStatus } from '../../generated/prisma/enums.js'
 export const taskController = {
     getTasksByProjectId: async(req: Request, res: Response) => {
         const { projectId } = req.params
-        const {status} = req.query
+        const {status, search} = req.query
 
         if (typeof projectId !== 'string') {
             return res.status(400).json({ error: 'Invalid project ID' })
@@ -15,8 +15,12 @@ export const taskController = {
             return res.status(400).json({ error: 'Invalid status parameter' }) 
         }
 
+        if(search !== undefined && typeof search !== 'string'){
+            return res.status(400).json({error: 'Invalid search parameter'})
+        }
+
         try {
-            const tasks = await taskServices.getTasksByProjectId(projectId,status)
+            const tasks = await taskServices.getTasksByProjectId(projectId,status, search)
             return res.status(200).json(tasks)
         } catch (error) {
             console.error('Error fetching tasks:', error)
