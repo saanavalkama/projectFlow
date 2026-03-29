@@ -1,10 +1,10 @@
 import { useState } from "react"
 import ProjectDetailCard from "./ProjectDetailCard"
-import TaskList from "../../tasks/components/TaskList"
 import AddTaskForm from "../../tasks/components/AddTaskForm"
 import EditProjectForm  from "./EditProjectForm"
 import ProjectDetailButtonGroup from "./ProjectDetailButtonGroup"
 import { useProject } from "../hooks/useProject"
+import Tasks from "../../tasks/components/Tasks"
 
 
 type ProjectDetailProps = {
@@ -31,7 +31,7 @@ export default function ProjectDetails({projectId}:ProjectDetailProps){
     return(
         <div className="project-detail">
             <ProjectDetailCard project={project}/>
-            <TaskList projectId={projectId}/>
+            <Tasks projectId={projectId}/>
             <ProjectDetailButtonGroup 
                 setIsAddTaskOpen={setIsAddTaskOpen}
                 setIsEditProjectOpen={setIsEditProjectOpen}

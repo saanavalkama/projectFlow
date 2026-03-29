@@ -8,9 +8,9 @@ export const taskServices = {
             return response.data
     },
 
-    getTasksByProjectId: async (projectId: string, status: TaskStatus | undefined) : Promise<Task[]> => {
+    getTasksByProjectId: async (projectId: string, status: TaskStatus | undefined, search: string | undefined) : Promise<Task[]> => {
         const response = await api.get<Task[]>(`/projects/${projectId}/tasks`, {
-            params: {status}
+            params: {status, search}
         })
         return response.data
     }, 
