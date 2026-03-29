@@ -1,5 +1,6 @@
 import { useSearchParams} from "react-router-dom"
 import { normalizeTaskStatus } from "../utils/normalizeStatus"
+import { useCallback } from "react"
 
 
 export function useTaskFilter(){
@@ -17,13 +18,13 @@ export function useTaskFilter(){
         })
     }
 
-    function setSearch(value: string){
-        setSearchParams(prev => {
+    const setSearch = useCallback((value: string):void => {
+        setSearchParams((prev: URLSearchParams) : URLSearchParams=> {
             const next = new URLSearchParams(prev)
             value.trim() === "" ? next.delete("search") : next.set("search", value)
             return next
-        }
-    )}
+        })
+    }, [setSearchParams])
 
     return {status, currentFilter, setFilter, currentSearchParam, setSearch, search}
 
