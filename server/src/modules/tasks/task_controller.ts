@@ -1,26 +1,22 @@
 import type { Request, Response } from 'express'
 import { taskServices } from './task_services.js'
-import { TaskStatus } from '../../generated/prisma/enums.js'
+import { z } from 'zod'
+import { projectIdParamSchema, createTaskSchema, taskIdParamSchema, taskQuerySchema, updateTaskStatusSchema } from '../../schemas/taskSchemas.js'
 
 export const taskController = {
     getTasksByProjectId: async(req: Request, res: Response) => {
-        const { projectId } = req.params
-        const {status, search} = req.query
-
-        if (typeof projectId !== 'string') {
-            return res.status(400).json({ error: 'Invalid project ID' })
+        const parsedParams = projectIdParamSchema.safeParse(req.params)
+        if(!parsedParams.success){
+            return res.status(400).json({error: z.treeifyError(parsedParams.error)})
         }
-
-        if (status !== undefined && typeof status !== 'string') {
-            return res.status(400).json({ error: 'Invalid status parameter' }) 
-        }
-
-        if(search !== undefined && typeof search !== 'string'){
-            return res.status(400).json({error: 'Invalid search parameter'})
-        }
-
+        
+        const parsedQuery = taskQuerySchema.safeParse(req.query)
+        if(!parsedQuery.success){
+            return res.status(400).json({error: z.treeifyError(parsedQuery.error)})
+        }       
+        
         try {
-            const tasks = await taskServices.getTasksByProjectId(projectId,status, search)
+            const tasks = await taskServices.getTasksByProjectId(parsedParams.data.projectId, parsedQuery.data)
             return res.status(200).json(tasks)
         } catch (error) {
             console.error('Error fetching tasks:', error)
@@ -30,54 +26,45 @@ export const taskController = {
 
     createTask: async(req: Request, res: Response) => {
         
-        const { title, details } = req.body
-        const { projectId } = req.params
-
-        if (!title || typeof title !== 'string' || title.trim() === '') {
-            return res.status(400).json({ error: 'Task title is required and must be a non-empty string' })
+        const parsedBody = createTaskSchema.safeParse(req.body)
+        if(!parsedBody.success){
+            return res.status(400).json({error: z.treeifyError(parsedBody.error)})
         }
 
-        if(details !== undefined && typeof details !== 'string') {
-            return res.status(400).json({ error: 'Details must be a string' })
+        const parsedParams = projectIdParamSchema.safeParse(req.params)
+        if(!parsedParams.success){
+            return res.status(400).json({error: z.treeifyError(parsedParams.error)})
         }
-
-        if(!projectId || typeof projectId !== "string"){
-            return res.status(400).json({ error: 'Project ID is required' })
-        }
-
-        const trimmedTitle = title.trim()
-        const trimmedDetails = details?.trim() ?? ''
-
+       
         try {
-            const task = await taskServices.createTask(projectId, trimmedTitle, trimmedDetails)
+            const task = await taskServices.createTask(parsedParams.data.projectId, parsedBody.data)
             return res.status(201).json(task)
         } catch (error) {
             console.error('Error creating task:', error)
             return res.status(500).json({ error: 'Failed to create task' })
         }
     },
+    
     updateTask: async(req: Request, res: Response) => {
 
-        const {id} = req.params
-        const {status} = req.body
-
-        if(!id || typeof id !== "string"){
-            return res.status(400).json({error:'task id is required'})
+        const parsedParams = taskIdParamSchema.safeParse(req.params)
+        if(!parsedParams.success){
+            return res.status(400).json({error: z.treeifyError(parsedParams.error)})
         }
 
-        if(typeof status !== "string" || !Object.values(TaskStatus).includes(status as TaskStatus)){
-            return res.status(400).json({error:'valid task status is required' })
+        const parsedBody = updateTaskStatusSchema.safeParse(req.body)
+        if(!parsedBody.success){
+            return res.status(400).json({error: z.treeifyError(parsedBody.error)})
         }
-
-        const validStatus = status as TaskStatus
 
         try{
-            const updatedTask = await taskServices.updateTaskStatus(id, validStatus)
+            const updatedTask = await taskServices.updateTaskStatus(parsedParams.data.id, parsedBody.data.status)
             return res.status(200).json(updatedTask)
         } catch (error:any){
             if(error.code === "P2025"){
                 return res.status(404).json({error:'Task not found'})
             }
+            console.error('Error updating task status:', error)
             return res.status(500).json({error: "failed to update task"})
         }
 
@@ -85,33 +72,31 @@ export const taskController = {
     },
     deleteTask: async(req: Request, res: Response) => {
     
-        const {id} = req.params
-
-        if(!id || typeof id !== "string"){
-            return res.status(400).json({error:'id is required'})
+        const parsedParams = taskIdParamSchema.safeParse(req.params)
+        if(!parsedParams.success){
+            return res.status(400).json({error: z.treeifyError(parsedParams.error)})
         }
 
         try{
-            await taskServices.deleteTask(id)
-            res.status(204).send()
+            await taskServices.deleteTask(parsedParams.data.id)
+            return res.status(204).send()
         } catch(error:any) {
-            console.error(error)
             if(error.code === "P2025"){
                 return res.status(404).json({error:'task resource not found'})
             }
+             console.error('Error deleting task:', error)
             return res.status(500).json({error: "failed to delete task"})
         }
     },
     getTaskById: async(req:Request, res: Response) => {
         
-        const {id} = req.params
-
-        if(!id || typeof id !== "string" ){
-            return res.status(400).json({error:"task id is required"})
+        const parsedParams = taskIdParamSchema.safeParse(req.params)
+        if(!parsedParams.success){
+            return res.status(400).json({error: z.treeifyError(parsedParams.error)})
         }
 
         try{
-            const task = await taskServices.getTaskById(id)
+            const task = await taskServices.getTaskById(parsedParams.data.id)
             if(!task){
                 return res.status(404).json({error:'no task found with that id'})
             }

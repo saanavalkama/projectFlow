@@ -1,4 +1,5 @@
 import { prisma } from "../../lib/prisma.js";
+import { ProjectBody } from "../../schemas/projectSchemas.js";
 
 export const projectRepository = {
     deleteProject: async (id: string) => {
@@ -8,13 +9,8 @@ export const projectRepository = {
             }
         })
     },
-    createProject: async (name: string, description: string) => {
-        return await prisma.project.create({
-            data: {
-                name,
-                description
-            }
-        })
+    createProject: async (data: ProjectBody) => {
+        return await prisma.project.create({data})
     },
     getAllProjects: async () => {
         return await prisma.project.findMany({
@@ -23,15 +19,12 @@ export const projectRepository = {
             }
         })
     },
-    updateProject: async (id: string, name: string, description: string) => {
+    updateProject: async (id: string, data: ProjectBody) => {
         return await prisma.project.update({
             where: {
                 id
             },
-            data: {
-                name,
-                description
-            }
+            data
         })
     },
     getProjectById: async(id:string) => {

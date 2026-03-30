@@ -1,108 +1,100 @@
 import { projectServices } from "./project_services.js";
 import { Request, Response } from "express";
+import { projectBodySchema, idParamSchema } from "../../schemas/projectSchemas.js";
+import { z } from "zod";
 
 export const projectController = {
     createProject: async (req: Request, res: Response ) => {
         
-        const { name, description } = req.body
+        const parsed = projectBodySchema.safeParse(req.body)
 
-        if (!name || typeof name !== 'string' || name.trim() === '') {
-            return res.status(400).json({ error: 'Project name is required and must be a non-empty string' })
+        if(!parsed.success){
+            return res.status(400).json({error:z.treeifyError(parsed.error)})
         }
-
-        if(description !== undefined && typeof description !== 'string') {
-            return res.status(400).json({ error: 'Description must be a string' })
-        }
-
-        const trimmedName = name.trim()
-        const trimmedDescription = description ? description.trim() : ''
 
         try {
-            const project = await projectServices.createProject (trimmedName, trimmedDescription)
-            res.status(201).json(project)
+            const project = await projectServices.createProject (parsed.data)
+            return res.status(201).json(project)
         } catch (error) {
             console.error('Error creating project:', error)
-            res.status(500).json({ error: 'Failed to create project' })
+            return res.status(500).json({ error: 'Failed to create project' })
         }  
     },
     getAllProjects: async (_req: Request, res: Response) => {
         
         try {
             const projects = await projectServices.getAllProjects()
-            res.status(200).json(projects)
+            return res.status(200).json(projects)
         } catch (error) {
             console.error('Error fetching projects:', error)
-            res.status(500).json({ error: 'Failed to fetch projects' })
+            return res.status(500).json({ error: 'Failed to fetch projects' })
         }
     },
     deleteProject: async (req: Request, res: Response) => {
-        const { id } = req.params
+        
+        const parsed = idParamSchema.safeParse(req.params)
 
-        if(!id || typeof id !== "string"){
-            return res.status(400).json({error: "id not found or malformatted"})
+        if(!parsed.success){
+            return res.status(400).json({error:z.treeifyError(parsed.error)})
         }
 
         try{
-            await projectServices.deleteProject(id)            
-            res.status(204).send()
+            await projectServices.deleteProject(parsed.data.id)            
+            return res.status(204).send()
         }
         catch(error:any){
             if (error.code === 'P2025') {
                 return res.status(404).json({ error: 'Project not found' })
             }
             console.error('Error deleting project:', error)
-            res.status(500).json({ error: 'Failed to delete project' })
+            return res.status(500).json({ error: 'Failed to delete project' })
         }
     },
     updateProject: async (req: Request, res: Response) => {
-        const { id } = req.params
-        const { name, description } = req.body   
+        
+        const parsedParams = idParamSchema.safeParse(req.params)
 
-        if (!name || typeof name !== 'string' || name.trim() === '') {
-            return res.status(400).json({ error: 'Project name is required and must be a non-empty string' })
+        if(!parsedParams.success){
+            return res.status(400).json({error:z.treeifyError(parsedParams.error)})
         }
 
-        if(description !== undefined && typeof description !== 'string') {
-            return res.status(400).json({ error: 'Description must be a string' })
-        }
 
-        if(!id || typeof id !== "string"){
-            return res.status(400).json({error: "id not found or malformatted"})
-        }
+        const parsedBody = projectBodySchema.safeParse(req.body)
 
-        const trimmedUpdatedName = name.trim()
-        const trimmedUpdatedDescription = description ? description.trim() : ''
+        if(!parsedBody.success){
+            return res.status(400).json({error:z.treeifyError(parsedBody.error)})
+        }
 
         try {
-            const updatedProject = await projectServices.updateProject(id, trimmedUpdatedName, trimmedUpdatedDescription)
-            res.status(200).json(updatedProject)
+            const updatedProject = await projectServices.updateProject(parsedParams.data.id, parsedBody.data)
+            return res.status(200).json(updatedProject)
         } catch (error:any) {
             if (error.code === 'P2025') {
                 return res.status(404).json({ error: 'Project not found' })
             }
 
             console.error('Error updating project:', error)
-            res.status(500).json({ error: 'Failed to update project' })
+            return res.status(500).json({ error: 'Failed to update project' })
         }
     },
     getProjectById: async (req: Request, res: Response) => {
 
-        const { id } = req.params
-
         
-        if(!id || typeof id !== "string"){
-            return res.status(400).json({error: "id not found or malformatted"})
-        }
+        const parsed = idParamSchema.safeParse(req.params)
 
+        if(!parsed.success){
+            return res.status(400).json({error:z.treeifyError(parsed.error)})
+        }
+   
         try {
-            const project = await projectServices.getProjectById(id)
+            const project = await projectServices.getProjectById(parsed.data.id)
             if (!project) {
                 return res.status(404).json({ error: 'Project not found' })
             }
-            res.status(200).json(project)
-        } catch (error) {
+            return res.status(200).json(project)
+        } catch (error:any) {
             console.error('Error fetching project:', error)
-            res.status(500).json({ error: 'Failed to fetch project' })
+            return res.status(500).json({ error: 'Failed to fetch project' })
         }
     }
 }
