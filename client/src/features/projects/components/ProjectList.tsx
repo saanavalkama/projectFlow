@@ -1,12 +1,13 @@
 import ProjectListItem from "./ProjectListItem"
 import { useProjects } from "../hooks/useProjects"
+import { BounceLoader } from "react-spinners"
 
 
 export default function ProjectList() {
 
     const {data: projects, isPending, isError} = useProjects()
 
-    if (isPending) return <div>Loading...</div>
+    if (isPending) return <BounceLoader />
     if (isError) return <div>Error occurred while fetching projects.</div>
     if(projects.length === 0) return <div>no projects</div>
 

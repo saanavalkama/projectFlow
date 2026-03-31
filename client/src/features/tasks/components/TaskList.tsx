@@ -1,3 +1,4 @@
+import { BeatLoader } from "react-spinners"
 import { useTasks } from "../hooks/useTaskQueries"
 import { useTaskFilter } from "../hooks/useTaskStatusFilter"
 import { NavLink } from "react-router-dom"
@@ -15,7 +16,7 @@ export default function TaskList({ projectId }: TaskListProps) {
     const {data: tasks, isPending, error} = useTasks(projectId, status, search)
   
 
-    if(isPending) return<div>Loading tasks...</div>
+    if(isPending) return<BeatLoader />
     if(error) return <div>Error occurred while fetching tasks: {error.message}</div>
 
     return (

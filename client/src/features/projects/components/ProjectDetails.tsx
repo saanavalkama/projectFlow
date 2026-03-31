@@ -5,6 +5,7 @@ import EditProjectForm  from "./EditProjectForm"
 import ProjectDetailButtonGroup from "./ProjectDetailButtonGroup"
 import { useProject } from "../hooks/useProject"
 import Tasks from "../../tasks/components/Tasks"
+import { BounceLoader } from "react-spinners"
 
 
 type ProjectDetailProps = {
@@ -20,7 +21,7 @@ export default function ProjectDetails({projectId}:ProjectDetailProps){
 
     if(!projectId) return <div>Click project to see details</div>
 
-    if(isPending) return <div>Loading...</div>
+    if(isPending) return <BounceLoader />
 
     if(isError) return <div>Error fetching the project</div>
 
