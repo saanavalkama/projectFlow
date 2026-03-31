@@ -1,8 +1,9 @@
+import { ProjectBody} from "../../schemas/projectSchemas.js";
 import {projectRepository} from "./project_repository.js";
 
 export const projectServices = {
-    createProject: async (name: string, description: string) => {
-        return await projectRepository.createProject(name, description)
+    createProject: async (data: ProjectBody) => {
+        return await projectRepository.createProject(data)
     },
 
     getAllProjects: async () => {
@@ -13,8 +14,8 @@ export const projectServices = {
         return  await projectRepository.deleteProject(id)
     },
 
-    updateProject: async (id: string, name: string, description: string) => {
-        return await projectRepository.updateProject(id, name, description)
+    updateProject: async (id:string, data: ProjectBody) => {
+        return await projectRepository.updateProject(id, data)
     },
     
     getProjectById: async (id: string) => {

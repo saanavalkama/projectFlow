@@ -1,10 +1,11 @@
-import { title } from "node:process";
-import { TaskStatus } from "../../generated/prisma/enums.js";
+import  {TaskQuery, UpdateTaskStatus } from "../../schemas/taskSchemas.js"
 import { prisma } from "../../lib/prisma.js";
+import { NewTask } from "../../schemas/taskSchemas.js";
     
 export const taskRepository = {
 
-    getTasksByProjectId: async(projectId: string, status?:TaskStatus, search?: string) => {
+    getTasksByProjectId: async(projectId: string, data: TaskQuery) => {
+        const {status, search} = data
         const where = {
             projectId,
             ...(status && {status}),
@@ -13,12 +14,11 @@ export const taskRepository = {
         return prisma.task.findMany({where})
     },
 
-    createTask: async (projectId: string, title: string, details: string) => {
+    createTask: async (projectId: string, data: NewTask) => {
         return await prisma.task.create({
             data: {
                 projectId,
-                title,
-                details
+                ...data
             }
         })
     },
@@ -31,7 +31,7 @@ export const taskRepository = {
     },
 
 
-    updateTaskStatus: async(id:string, status:TaskStatus) => {
+    updateTaskStatus: async(id:string, status:UpdateTaskStatus['status']) => {
         return await prisma.task.update({
             where:{
                 id

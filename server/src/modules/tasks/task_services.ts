@@ -1,25 +1,21 @@
-import { TaskStatus } from "../../generated/prisma/enums.js";
 import { taskRepository } from "./task_respository.js";
+import type { NewTask, TaskQuery, UpdateTaskStatus } from "../../schemas/taskSchemas.js";
+
 
 export const taskServices = {
 
-    getTasksByProjectId: async (projectId: string, status?:string, search?: string) => {
-
-        if(status !== undefined && !Object.values(TaskStatus).includes(status as TaskStatus)){
-            throw new Error("malformatted status")
-        }
-
-        return await taskRepository.getTasksByProjectId(projectId, status as TaskStatus | undefined, search)
+    getTasksByProjectId: async (projectId: string, data: TaskQuery ) => {
+        return await taskRepository.getTasksByProjectId(projectId, data)
     },
 
-    createTask: async (projectId: string, title: string, details: string) => {
-        return await taskRepository.createTask(projectId, title, details)
+    createTask: async (projectId: string, data: NewTask) => {
+        return await taskRepository.createTask(projectId, data)
     },
     getTaskById: async(id:string) => {
         return await taskRepository.getTaskById(id)
     },
 
-    updateTaskStatus: async(id:string, status: TaskStatus)=>{
+    updateTaskStatus: async(id:string, status: UpdateTaskStatus['status'])=>{
         return await taskRepository.updateTaskStatus(id, status)
     },
     

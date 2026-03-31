@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useTask } from "../hooks/useTaskQueries"
 import { useDeleteTask } from "../hooks/useTaskMutations"
 import type { DeleteTaskInput } from "../types/types"
+import { BounceLoader } from "react-spinners"
 
 type TaskDetailProps = {
     taskId: string | undefined
@@ -31,7 +32,7 @@ export default function TaskDetails({taskId,projectId}:TaskDetailProps){
 
     if(!taskId) return <div>click task to show details</div>
 
-    if(isPending) return <div>Loading</div>
+    if(isPending) return <BounceLoader />
 
     if(isError) return <div>Error while fetching task</div>
 
