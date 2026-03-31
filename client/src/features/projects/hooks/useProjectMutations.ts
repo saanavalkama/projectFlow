@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import type { NewProject } from "../types/types"
 import { projectServices } from "../services/projectServices"
+import {toast} from "sonner"
+import { getErrorMessage } from "../../../utils/getErrorMessage"
 
 
 export const useCreateProject = () => {
@@ -9,6 +11,10 @@ export const useCreateProject = () => {
         mutationFn: (newProject: NewProject)=>projectServices.createProject(newProject),
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey:['projects']})
+            toast.success("Project created successfully!")
+        },
+        onError: (error) => {
+            toast.error(getErrorMessage(error, "Failed to create project. Please try again."))
         }
     })
 }
@@ -20,8 +26,11 @@ export const useEditProject = () => {
         onSuccess:(_,{id})=>{            
             queryClient.invalidateQueries({queryKey:['projects']})
             queryClient.invalidateQueries({queryKey:['project',id]})
+            toast.success("Project updated successfully!")
+        },
+        onError: (error) => {
+            toast.error(getErrorMessage(error, "Failed to update project. Please try again."))
         }
-
     })
 }
 
@@ -32,6 +41,10 @@ export const useDeleteProject = () => {
         onSuccess: (_,id) => {
             queryClient.invalidateQueries({queryKey:['projects']})
             queryClient.removeQueries({queryKey: ['project',id]})
+            toast.success("Project deleted successfully!")
+        },
+        onError: (error) => {
+            toast.error(getErrorMessage(error, "Failed to delete project. Please try again."))
         }
     })
 }
