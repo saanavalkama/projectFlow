@@ -1,3 +1,4 @@
+import { NotFoundError } from "../../errors/AppError.js";
 import { ProjectBody} from "../../schemas/projectSchemas.js";
 import {projectRepository} from "./project_repository.js";
 
@@ -19,7 +20,11 @@ export const projectServices = {
     },
     
     getProjectById: async (id: string) => {
-        return await projectRepository.getProjectById(id)
+        const project =  await projectRepository.getProjectById(id)
+        if(!project){
+            throw new NotFoundError("Project")
+        }
+        return project
     }
 }
 

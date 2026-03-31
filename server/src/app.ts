@@ -4,6 +4,7 @@ import projectRoutes from './modules/projects/project_routes.js'
 import taskRoutes from './modules/tasks/task_routes.js'
 import cors from 'cors'
 import { env } from './config/env.js'
+import { errorHandler } from './middleware/errorHandler.js'
 
 
 export const app = express()
@@ -20,6 +21,8 @@ app.use("/", taskRoutes)
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'working'})
 })
+
+app.use(errorHandler)
 
 
 
