@@ -1,5 +1,6 @@
 import { taskRepository } from "./task_respository.js";
 import type { NewTask, TaskQuery, UpdateTaskStatus } from "../../schemas/taskSchemas.js";
+import { NotFoundError } from "../../errors/AppError.js";
 
 
 export const taskServices = {
@@ -12,7 +13,11 @@ export const taskServices = {
         return await taskRepository.createTask(projectId, data)
     },
     getTaskById: async(id:string) => {
-        return await taskRepository.getTaskById(id)
+        const task =  await taskRepository.getTaskById(id)
+        if(!task){
+            throw new NotFoundError("Task")
+        }
+        return task
     },
 
     updateTaskStatus: async(id:string, status: UpdateTaskStatus['status'])=>{
