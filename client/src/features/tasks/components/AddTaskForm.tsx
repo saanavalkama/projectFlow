@@ -1,7 +1,10 @@
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import type { SubmitHandler } from "react-hook-form"
 import type { NewTask } from "../types/types"
 import { useCreateTask } from "../hooks/useTaskMutations"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css";
+
 
 
 type AddTaskFormProps = {
@@ -13,7 +16,7 @@ type AddTaskFormProps = {
 
 export default function AddTaskForm({projectId, setIsTaskFormOpen}:AddTaskFormProps){
 
-    const {register, handleSubmit, reset} = useForm<NewTask>()
+    const {register, handleSubmit, reset, control} = useForm<NewTask>()
 
     const {mutate:createTask, isPending, isError} = useCreateTask()
 
@@ -41,6 +44,22 @@ export default function AddTaskForm({projectId, setIsTaskFormOpen}:AddTaskFormPr
                     <label htmlFor="details">Details</label>
                     <textarea id="details" {...register("details")}/>
                 </div>
+                <div>
+                <label htmlFor="dueDate">Due Date</label>
+                <Controller
+                    control={control}
+                    name="dueDate"
+                    render={({ field }) => (
+                    <DatePicker
+                        id="dueDate"
+                        placeholderText="Select due date"
+                        onChange={(date:Date | null) => field.onChange(date ? date.toISOString() : undefined)}
+                        selected={field.value ? new Date(field.value) : null}
+                        dateFormat="dd-MM-yyyy"
+                    />
+                    )}
+                />
+                </div>
                 <button 
                     disabled={isPending}
                 >
@@ -53,6 +72,7 @@ export default function AddTaskForm({projectId, setIsTaskFormOpen}:AddTaskFormPr
             >
                 Back to project view
             </button>
+    
         </div>
     )
 }

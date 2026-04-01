@@ -2,7 +2,8 @@ import {z} from "zod"
 
 export const createTaskSchema = z.object({
     title: z.string().trim().min(1, "Task title is required"),
-    details: z.string().trim().nullish().transform((val) => val == null ||val === "" ? undefined : val)
+    details: z.string().trim().nullish().transform((val) => val == null ||val === "" ? undefined : val),
+    dueDate: z.string().datetime().nullish()
 })
 
 export const updateTaskStatusSchema = z.object({

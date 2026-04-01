@@ -5,7 +5,8 @@ export interface Task{
     id: string;
     createdAt: string;
     updatedAt: string;
-    status: TaskStatus
+    status: TaskStatus,
+    dueDate: string | null;
 }
 
 export type TaskStatus = "TODO" | "IN_PROGRESS" | "DONE"
@@ -13,6 +14,7 @@ export type TaskStatus = "TODO" | "IN_PROGRESS" | "DONE"
 export interface NewTask{
     title: string;
     details?: string;
+    dueDate?: string;
 }
 
 export interface UpdateTaskStatusInput{
