@@ -28,6 +28,8 @@ export const statsService = {
             projectName: item.name,
             taskCount: Number(item._count.task)
         }))
+        .sort((a,b)=> b.taskCount - a.taskCount)
+        .slice(0,10)
     },
 
     getTasksOverTime: async (projectId?: string) => {

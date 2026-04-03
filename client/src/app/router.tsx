@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout";
 import Workspace from "../pages/Workspace";
+import Stats from "../pages/Stats";
+
 
 const router =  createBrowserRouter([
   {
@@ -11,6 +13,7 @@ const router =  createBrowserRouter([
       {path: "workspace", element: <Workspace />},
       {path: "workspace/:projectId", element:<Workspace />},
       {path: "workspace/:projectId/tasks/:taskId", element:<Workspace/>},
+      {path: "stats", element: <Stats />},
       {path: "*", element: <h2>404 - Not Found</h2>},
       
     ]
