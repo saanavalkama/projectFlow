@@ -2,9 +2,13 @@ import { useForm, Controller } from "react-hook-form"
 import type { SubmitHandler } from "react-hook-form"
 import type { NewTask } from "../types/types"
 import { useCreateTask } from "../hooks/useTaskMutations"
-import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css";
-
+import {Field, FieldLabel} from "@/components/ui/field"
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { Button } from "@/components/ui/button"
+import FormInput from "../../ui/FormInput"
+import {format} from "date-fns"
+import FormTextArea from "@/features/ui/FormTextArea"
 
 
 type AddTaskFormProps = {
@@ -16,7 +20,7 @@ type AddTaskFormProps = {
 
 export default function AddTaskForm({projectId, setIsTaskFormOpen}:AddTaskFormProps){
 
-    const {register, handleSubmit, reset, control} = useForm<NewTask>()
+    const {register, handleSubmit, reset, control, formState: {errors}} = useForm<NewTask>()
 
     const {mutate:createTask, isPending, isError} = useCreateTask()
 
@@ -30,38 +34,58 @@ export default function AddTaskForm({projectId, setIsTaskFormOpen}:AddTaskFormPr
     }
     
     return(
-        <div className="add-task-form">
+        <div className="flex flex-col items-center">
             <div>
-                <h2>Add task</h2>
                 {isError && <div>Error while creating the task</div>}
             </div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div>
-                    <label htmlFor="title">Title</label>
-                    <input id="title" {...register("title",{required:"The title is required"})} />
-                </div>
-                <div>
-                    <label htmlFor="details">Details</label>
-                    <textarea id="details" {...register("details")}/>
-                </div>
-                <div>
-                <label htmlFor="dueDate">Due Date</label>
+            <form onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col items-center"
+            >
+                <FormInput
+                  label="title"
+                  name="title"
+                  registration={register("title", {required:"title is required"})}
+                  errorMsg={errors.title?.message}
+                
+                />
+                <FormTextArea
+                  label="details"
+                  name="details"
+                  registration={register("details")}
+                  errorMsg={errors.details?.message}
+                />
                 <Controller
                     control={control}
                     name="dueDate"
                     render={({ field }) => (
-                    <DatePicker
-                        id="dueDate"
-                        placeholderText="Select due date"
-                        onChange={(date:Date | null) => field.onChange(date ? date.toISOString() : undefined)}
-                        selected={field.value ? new Date(field.value) : null}
-                        dateFormat="dd-MM-yyyy"
-                    />
+                      <Field className="mx-auto w-44">
+                        <FieldLabel htmlFor="date-picker-simple">Due Date</FieldLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    id="date-picker-simple"
+                                    className="justify-start font-normal"
+                                >
+                                {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                                mode="single"
+                                selected={field.value ? new Date(field.value) : undefined}
+                                onSelect={(date)=>field.onChange(date? date.toISOString() : undefined)}
+                                defaultMonth={new Date()}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </Field>
                     )}
                 />
-                </div>
                 <button 
                     disabled={isPending}
+                    type="submit"
+                    className="bg-teal-600 hover:bg-teal-500 text-white font-bold rounded py-2 px-4 w-fit my-1"
                 >
                     {isPending ? "Creating new task" : "Create new task"}
                 </button>
@@ -69,6 +93,7 @@ export default function AddTaskForm({projectId, setIsTaskFormOpen}:AddTaskFormPr
             <button
               disabled={isPending}
               onClick={()=>setIsTaskFormOpen(false)}
+              className="bg-red-900 hover:bg-red-700 text-white font-bold rounded py-2 px-4 w-fit my-1"
             >
                 Back to project view
             </button>

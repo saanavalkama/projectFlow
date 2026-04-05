@@ -7,11 +7,11 @@ type ProjectDetailCardProps = {
 export default function ProjectDetailCard({project}:ProjectDetailCardProps){
 
     return(
-        <div>
+        <div className="h-full">
             <h2>{project.name}</h2>
             {project.description ? <p>{project.description}</p> : <p>No description provided</p>}
-            <p>Created at: {project.createdAt}</p>
-            <p>Updated at: {project.updatedAt}</p>
+            <p>Created at: {new Date(project.createdAt).toLocaleDateString()}</p>
+            <p>Updated at: {new Date(project.updatedAt).toLocaleDateString()}</p>
         </div>
     )
 }

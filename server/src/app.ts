@@ -5,6 +5,7 @@ import taskRoutes from './modules/tasks/task_routes.js'
 import cors from 'cors'
 import { env } from './config/env.js'
 import { errorHandler } from './middleware/errorHandler.js'
+import statRoutes from './modules/stats/stats_routes.js'
 
 
 export const app = express()
@@ -17,6 +18,7 @@ app.use(express.json())
 
 app.use('/projects', projectRoutes)
 app.use("/", taskRoutes)
+app.use("/", statRoutes)
 
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'working'})
