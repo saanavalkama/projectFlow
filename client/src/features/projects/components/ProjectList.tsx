@@ -1,6 +1,7 @@
-import ProjectListItem from "./ProjectListItem"
 import { useProjects } from "../hooks/useProjects"
 import { BounceLoader } from "react-spinners"
+import ProjectCard from "./ProjectCard"
+import { Link } from "react-router-dom"
 
 
 export default function ProjectList() {
@@ -12,8 +13,15 @@ export default function ProjectList() {
     if(projects.length === 0) return <div>no projects</div>
 
     return (
-        <div>
-            {projects.map(ele => <ProjectListItem key={ele.id} project={ele} /> )}
-        </div>
+        <ul className="h-full overflow-y-auto p-4">
+            {projects.map(ele => (
+                <Link to={`/projects/${ele.id}`} key={ele.id}>
+                    <li>
+                        <ProjectCard project={ele} />
+                    </li>
+                </Link>
+            ))
+            }
+        </ul>
     )
 }

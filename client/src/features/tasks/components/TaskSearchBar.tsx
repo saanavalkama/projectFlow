@@ -2,11 +2,9 @@ import { useEffect } from "react"
 import { useTaskFilter } from "../hooks/useTaskStatusFilter"
 import { useDebounce } from "../hooks/useDebounce"
 import { useState, useRef } from "react"
+import { Input } from "@/components/ui/input"
 
 export default function TaskSearchBar(){
-
-
-    console.log("rendering search bar")
 
     const { setSearch, currentSearchParam } = useTaskFilter()
     const [inputValue, setInputValue] = useState<string>(currentSearchParam)
@@ -26,13 +24,13 @@ export default function TaskSearchBar(){
     }, [debouncedSearch, setSearch])
 
     return(
-        <div>
-            <input 
-              type="text" 
-              placeholder="Search tasks..." 
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-            />
-        </div>
+        <Input 
+            className="m-4 max-w-sm"
+            type="text" 
+            placeholder="Search tasks..." 
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+        />
+     
     )
 }
