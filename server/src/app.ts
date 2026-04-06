@@ -11,7 +11,8 @@ import statRoutes from './modules/stats/stats_routes.js'
 export const app = express()
 
 app.use(cors({
-  origin: env.CLIENT_ORIGIN
+  origin: env.CLIENT_ORIGIN,
+  credentials:true
 }))
 
 app.use(express.json())
