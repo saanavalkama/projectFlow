@@ -7,16 +7,17 @@ type Props = {
     name: string, 
     registration: ReturnType<UseFormRegister<any>>
     description?:string,
-    errorMsg?:string
+    errorMsg?:string,
+    type?: string
 }
 
-export default function FormInput({label, name, registration, description, errorMsg}:Props){
+export default function FormInput({label, name, registration, description, errorMsg, type="text"}:Props){
     return(
         <Field className="p-2">
             <FieldLabel htmlFor={name}>
                 {label}
             </FieldLabel>
-            <Input id={name} {...registration} />
+            <Input id={name} type={type} {...registration} />
             {(description || errorMsg) &&
             <FieldDescription className={errorMsg ? 'text-red-500 text-sm' : 'text-white text-sm' }>
                 {errorMsg ?? description}

@@ -25,3 +25,17 @@ export class InternalServerError extends AppError {
         this.name = "InternalServerError"
     }
 }
+
+export class ConflictError extends AppError{
+    constructor(message: string = "Conflict Errror"){
+        super(message, 409)
+        this.name = 'ConflictError'
+    }
+}
+
+export class UnauthorizedError extends AppError{
+    constructor(message:string = "Unauthorized"){
+        super(message,401)
+        this.name = "UnauthorizedError"
+    }
+}
