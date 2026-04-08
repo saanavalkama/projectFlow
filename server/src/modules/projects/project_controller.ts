@@ -1,3 +1,4 @@
+import { UnauthorizedError } from "../../errors/AppError.js";
 import { ProjectBody } from "../../schemas/projectSchemas.js";
 import { projectServices } from "./project_services.js";
 import { Request, Response } from "express";
@@ -11,13 +12,18 @@ export const projectController = {
     
     createProject: async (req: Request, res: Response) => {
         const data = req.body as ProjectBody
-        const project = await projectServices.createProject (data)
-        return res.status(201).json(project)  
+        const ownerId = req.session.userId
+        //require Auth should catch this alredy but lets be safe
+        if(!ownerId) throw new UnauthorizedError('not logged in')
+        const project = await projectServices.createProject(data, ownerId)
+        return res.status(201).json(project)
     },
 
-    getAllProjects: async (_req: Request, res: Response) => {
-        const projects = await projectServices.getAllProjects()
-        return res.status(200).json(projects)   
+    getAllProjects: async (req: Request, res: Response) => {
+        const userId = req.session.userId
+        if(!userId) throw new UnauthorizedError('not logged in')
+        const projects = await projectServices.getAllProjects(userId)
+        return res.status(200).json(projects)
     },
 
     deleteProject: async (req: Request, res: Response) => {
