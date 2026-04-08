@@ -8,7 +8,7 @@ export function validate(schema:ZodSchema, type: ReqType) {
     return (req: Request, res: Response, next: NextFunction) => {
         const parsed = schema.safeParse(req[type])
 
-        console.log("Validation result:", parsed)
+        console.log(parsed)
 
         if(!parsed.success){
             return res.status(400).json({error: z.treeifyError(parsed.error)})

@@ -4,7 +4,7 @@ import { projectServices } from "../services/projectServices";
 export const useProjects = () => {
     return useQuery({
         queryKey: ['projects'],
-        queryFn: ()=> projectServices.getAllProjects()
+        queryFn: ()=> projectServices.getAllProjects(),
     })
 }
 
