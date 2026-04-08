@@ -3,6 +3,7 @@ import { projectController } from "./project_controller.js";
 import { validate } from "../../middleware/validation.js";
 import { idParamSchema, projectBodySchema } from "../../schemas/projectSchemas.js";
 import { requireAuth } from "../../middleware/requireAuth.js";
+import { requireOwner } from "../../middleware/requireOwner.js";
 
 const router = Router()
 
@@ -18,18 +19,19 @@ router.get(
     projectController.getAllProjects)
 
 router.delete(
-    "/:id", 
+    "/:id",
     requireAuth,
     validate(idParamSchema,"params"),
+    requireOwner,
     projectController.deleteProject
 )
 router.put(
-    "/:id", 
+    "/:id",
     requireAuth,
     validate(idParamSchema,"params"),
-    validate(projectBodySchema,"body"),
+    requireOwner,
     projectController.updateProject
-) 
+)
 router.get(
     "/:id", 
     requireAuth,

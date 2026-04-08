@@ -9,11 +9,12 @@ export const projectRepository = {
             }
         })
     },
-    createProject: async (data: ProjectBody) => {
-        return await prisma.project.create({data})
+    createProject: async (data: ProjectBody, ownerId: string) => {
+        return await prisma.project.create({ data: { ...data, ownerId } })
     },
-    getAllProjects: async () => {
+    getAllProjects: async (userId: string) => {
         return await prisma.project.findMany({
+            where: { ownerId: userId },
             orderBy: {
                 createdAt: 'desc'
             }

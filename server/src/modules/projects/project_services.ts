@@ -3,12 +3,12 @@ import { ProjectBody} from "../../schemas/projectSchemas.js";
 import {projectRepository} from "./project_repository.js";
 
 export const projectServices = {
-    createProject: async (data: ProjectBody) => {
-        return await projectRepository.createProject(data)
+    createProject: async (data: ProjectBody, ownerId: string) => {
+        return await projectRepository.createProject(data, ownerId)
     },
 
-    getAllProjects: async () => {
-        return await projectRepository.getAllProjects()
+    getAllProjects: async (userId: string) => {
+        return await projectRepository.getAllProjects(userId)
     },
 
     deleteProject: async (id: string) => {
