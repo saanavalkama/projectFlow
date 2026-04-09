@@ -2,6 +2,7 @@
 import express from 'express'
 import projectRoutes from './modules/projects/project_routes.js'
 import taskRoutes from './modules/tasks/task_routes.js'
+import memberRoutes from './modules/members/members_routes.js'
 import cors from 'cors'
 import { env } from './config/env.js'
 import { errorHandler } from './middleware/errorHandler.js'
@@ -22,6 +23,7 @@ app.use(cors({
 app.use(sessionMiddleware)
 
 app.use('/projects', projectRoutes)
+app.use('/projects', memberRoutes)
 app.use("/", taskRoutes)
 app.use("/", statRoutes)
 app.use("/",authRoutes)
