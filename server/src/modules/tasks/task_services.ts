@@ -9,8 +9,8 @@ export const taskServices = {
         return await taskRepository.getTasksByProjectId(projectId, data)
     },
 
-    createTask: async (projectId: string, data: NewTask) => {
-        return await taskRepository.createTask(projectId, data)
+    createTask: async (createdById:string, projectId: string, data: NewTask) => {
+        return await taskRepository.createTask(createdById, projectId, data)
     },
     getTaskById: async(id:string) => {
         const task =  await taskRepository.getTaskById(id)

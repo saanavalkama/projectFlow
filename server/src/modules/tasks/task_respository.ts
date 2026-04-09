@@ -14,9 +14,10 @@ export const taskRepository = {
         return prisma.task.findMany({where})
     },
 
-    createTask: async (projectId: string, data: NewTask) => {
+    createTask: async (createdById:string,projectId: string, data: NewTask) => {
         return await prisma.task.create({
             data: {
+                createdById,
                 projectId,
                 ...data
             }

@@ -53,3 +53,12 @@ model User{
   projects Project[]
   createdTasks Task[]
 }
+
+enum MemberRole{
+  ADMIN
+  MEMBER
+}
+
+model ProjectMember{
+  id String 
+}

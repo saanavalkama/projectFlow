@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { taskController } from "./task_controller.js";
 import { validate } from "../../middleware/validation.js";
-import { createTaskSchema, projectIdParamSchema, taskIdParamSchema, taskQuerySchema, updateTaskStatusSchema } from "../../schemas/taskSchemas.js";
+import { createTaskSchema, projectIdParamSchema, projectTaskParamsSchema, taskQuerySchema, updateTaskStatusSchema } from "../../schemas/taskSchemas.js";
 import { requireAuth } from "../../middleware/requireAuth.js";
 
 const router = Router()
@@ -21,22 +21,22 @@ router.post(
     taskController.createTask
 )
 router.put(
-    "/tasks/:id", 
+    "/projects/:projectId/tasks/:id",
     requireAuth,
-    validate(taskIdParamSchema, "params"),
+    validate(projectTaskParamsSchema, "params"),
     validate(updateTaskStatusSchema, "body"),
     taskController.updateTask
 )
 router.delete(
-    "/tasks/:id", 
+    "/projects/:projectId/tasks/:id",
     requireAuth,
-    validate(taskIdParamSchema, "params"),
+    validate(projectTaskParamsSchema, "params"),
     taskController.deleteTask
 )
 router.get(
-    "/tasks/:id", 
+    "/projects/:projectId/tasks/:id",
     requireAuth,
-    validate(taskIdParamSchema, "params"),
+    validate(projectTaskParamsSchema, "params"),
     taskController.getTaskById
 )
 

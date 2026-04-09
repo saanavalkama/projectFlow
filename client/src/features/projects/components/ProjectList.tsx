@@ -15,7 +15,7 @@ export default function ProjectList() {
     return (
         <ul className="h-full overflow-y-auto p-4">
             {projects.map(ele => (
-                <Link to={`/projects/${ele.id}`} key={ele.id}>
+                <Link to={`/app/projects/${ele.id}`} key={ele.id}>
                     <li>
                         <ProjectCard project={ele} />
                     </li>

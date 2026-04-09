@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express'
 import { taskServices } from './task_services.js'
 import { NewTask, TaskQuery, UpdateTaskStatus } from '../../schemas/taskSchemas.js'
+import { UnauthorizedError } from '../../errors/AppError.js'
 
 //NOTE: 
 //1. All validation is done in the routes using the validate middleware, so we can assume that the data is valid in the controller and directly use it.
@@ -19,7 +20,9 @@ export const taskController = {
     createTask: async(req: Request, res: Response) => {
         const data = req.body as NewTask
         const {projectId} = req.params as {projectId: string}
-        const task = await taskServices.createTask(projectId, data)
+        const createdById = req.session.userId
+        if(!createdById) throw new UnauthorizedError("Not logged in")
+        const task = await taskServices.createTask(createdById, projectId, data)
         return res.status(201).json(task)  
     },
     
