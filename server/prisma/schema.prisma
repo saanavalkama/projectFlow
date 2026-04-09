@@ -21,6 +21,7 @@ model Project{
   task Task[]
   ownerId String
   owner User @relation(fields:[ownerId],references:[id])
+  members ProjectMember[]
 }
 
 model Task{
@@ -52,6 +53,22 @@ model User{
   updatedAt DateTime @updatedAt
   projects Project[]
   createdTasks Task[]
+  members ProjectMember[]
+}
+
+enum MemberRole{
+  ADMIN
+  MEMBER
+}
+
+model ProjectMember{
+  id String @id @default(uuid())
+  userId String
+  projectId String
+  role MemberRole @default(MEMBER)
+  user User @relation(fields:[userId], references:[id], onDelete:Cascade)
+  project Project @relation(fields:[projectId], references:[id], onDelete:Cascade)
+  @@unique([userId, projectId])
 }
 
 enum MemberRole{
