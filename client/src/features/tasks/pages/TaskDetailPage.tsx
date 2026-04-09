@@ -11,7 +11,7 @@ export default function TaskDetailPage(){
 
     const {taskId,projectId} = useParams()
 
-    const {data:task, isPending, isError} = useTask(taskId)
+    const {data:task, isPending, isError} = useTask(projectId, taskId)
 
     if(!taskId || !projectId) return <div>something went wrong</div>
     if(isPending) return <BounceLoader />

@@ -22,30 +22,36 @@ const mockTask = {
 describe('useTask', ()=>{
     it('returns task data on success', async()=> {
         server.use(
-            http.get(`${baseURL}/tasks/:id`, ()=>{
+            http.get(`${baseURL}/projects/:projectId/tasks/:id`, ()=>{
                 return HttpResponse.json(mockTask)
             })
         )
 
-        const {result} = renderHook(()=>useTask('1'),{wrapper})
+        const {result} = renderHook(()=>useTask('project-1', '1'),{wrapper})
 
         await waitFor(()=>expect(result.current.isSuccess).toBe(true))
     })
 
     it('does not fetch if taskID is undefined', ()=>{
-        const {result} = renderHook(()=>useTask(undefined),{wrapper})
+        const {result} = renderHook(()=>useTask('project-1', undefined),{wrapper})
+        expect(result.current.isLoading).toBe(false)
+        expect(result.current.fetchStatus).toBe('idle')
+    })
+
+    it('does not fetch if projectId is undefined', ()=>{
+        const {result} = renderHook(()=>useTask(undefined, '1'),{wrapper})
         expect(result.current.isLoading).toBe(false)
         expect(result.current.fetchStatus).toBe('idle')
     })
 
     it('is in error state when request fails', async () => {
     server.use(
-      http.get(`${baseURL}/tasks/:id`, () => {
+      http.get(`${baseURL}/projects/:projectId/tasks/:id`, () => {
         return new HttpResponse(null, { status: 404 })
       })
     )
 
-      const { result } = renderHook(() => useTask('1'), { wrapper })
+      const { result } = renderHook(() => useTask('project-1', '1'), { wrapper })
 
       await waitFor(() => expect(result.current.isError).toBe(true))
   })
@@ -54,13 +60,13 @@ describe('useTask', ()=>{
     let capturedId: string | undefined
 
     server.use(
-        http.get(`${baseURL}/tasks/:id`, ({ params }) => {
+        http.get(`${baseURL}/projects/:projectId/tasks/:id`, ({ params }) => {
             capturedId = params.id as string
         return HttpResponse.json(mockTask)
         })
     )
 
-    const { result } = renderHook(() => useTask('1'), { wrapper })
+    const { result } = renderHook(() => useTask('project-1', '1'), { wrapper })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
@@ -68,4 +74,3 @@ describe('useTask', ()=>{
   })
 
 })
-

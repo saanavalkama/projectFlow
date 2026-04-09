@@ -18,7 +18,7 @@ export default function ProjectDetailPage(){
     return(
         <div className="flex w-full flex-col h-screen" >
           <div className="max-w-xl mx-auto w-full self-center">
-            <ProjectDetailBar name={project.name} />
+            <ProjectDetailBar name={project.name} ownerId={project.ownerId} />
           </div>
           <div className="flex flex-1 gap-5 p-4 overflow-hidden w-full">
             <div className="w-1/2 h-full">

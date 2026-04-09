@@ -62,7 +62,7 @@ describe('useUpdateTaskStatus', () => {
     let capturedId: string | undefined
 
     server.use(
-      http.put(`${BASE}/tasks/:id`, ({ params }) => {
+      http.put(`${BASE}/projects/:projectId/tasks/:id`, ({ params }) => {
         capturedId = params.id as string
         return HttpResponse.json(mockTask)
       })
@@ -81,7 +81,7 @@ describe('useUpdateTaskStatus', () => {
 
   it('is in error state when request fails', async () => {
     server.use(
-      http.put(`${BASE}/tasks/:id`, () => {
+      http.put(`${BASE}/projects/:projectId/tasks/:id`, () => {
         return new HttpResponse(null, { status: 500 })
       })
     )
@@ -101,7 +101,7 @@ describe('useDeleteTask', () => {
     let capturedId: string | undefined
 
     server.use(
-      http.delete(`${BASE}/tasks/:id`, ({ params }) => {
+      http.delete(`${BASE}/projects/:projectId/tasks/:id`, ({ params }) => {
         capturedId = params.id as string
         return new HttpResponse(null, { status: 204 })
       })
@@ -120,7 +120,7 @@ describe('useDeleteTask', () => {
 
   it('is in error state when request fails', async () => {
     server.use(
-      http.delete(`${BASE}/tasks/:id`, () => {
+      http.delete(`${BASE}/projects/:projectId/tasks/:id`, () => {
         return new HttpResponse(null, { status: 500 })
       })
     )

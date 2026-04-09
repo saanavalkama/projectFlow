@@ -14,6 +14,11 @@ export const taskIdParamSchema = z.object({
     id: z.string().uuid()
 })
 
+export const projectTaskParamsSchema = z.object({
+    projectId: z.string().uuid(),
+    id: z.string().uuid()
+})
+
 export const projectIdParamSchema = z.object({
     projectId: z.string().uuid()
 })

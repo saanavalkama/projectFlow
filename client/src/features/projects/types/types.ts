@@ -4,6 +4,7 @@ export interface Project{
     description?: string;
     createdAt: string;
     updatedAt: string;
+    ownerId: string;
 }
 
 export interface NewProject{
