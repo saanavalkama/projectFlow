@@ -5,6 +5,7 @@ import { idParamSchema, projectBodySchema } from "../../schemas/projectSchemas.j
 import { requireAuth } from "../../middleware/requireAuth.js";
 import { requireOwner } from "../../middleware/requireOwner.js";
 
+
 const router = Router()
 
 router.post(
@@ -16,7 +17,8 @@ router.post(
 router.get(
     "/", 
     requireAuth,
-    projectController.getAllProjects)
+    projectController.getAllProjects
+)
 
 router.delete(
     "/:id",

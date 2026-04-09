@@ -71,11 +71,3 @@ model ProjectMember{
   @@unique([userId, projectId])
 }
 
-enum MemberRole{
-  ADMIN
-  MEMBER
-}
-
-model ProjectMember{
-  id String 
-}
