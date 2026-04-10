@@ -4,6 +4,7 @@ import { validate } from "../../middleware/validation.js";
 import { createTaskSchema, projectIdParamSchema, projectTaskParamsSchema, taskQuerySchema, updateTaskStatusSchema } from "../../schemas/taskSchemas.js";
 import { requireAuth } from "../../middleware/requireAuth.js";
 import { requireTaskAccess } from "../../middleware/requireTaskAccess.js";
+import { requireRole } from "../../middleware/requireRole.js";
 
 const router = Router()
 
@@ -20,6 +21,7 @@ router.post(
     requireAuth,
     validate(projectIdParamSchema,"params"),
     requireTaskAccess,
+    requireRole("OWNER","ADMIN"),
     validate(createTaskSchema,"body"),
     taskController.createTask
 )
@@ -36,6 +38,7 @@ router.delete(
     requireAuth,
     validate(projectTaskParamsSchema, "params"),
     requireTaskAccess,
+    requireRole("OWNER","ADMIN"),
     taskController.deleteTask
 )
 router.get(

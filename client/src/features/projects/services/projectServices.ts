@@ -12,7 +12,6 @@ export const projectServices = {
     },
 
     getAllProjects: async () : Promise<Project[]> => {
-        console.log(api)
         const response = await api.get<Project[]>("/projects")
         return response.data
     },
