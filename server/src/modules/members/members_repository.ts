@@ -3,15 +3,18 @@ import { prisma } from "../../lib/prisma.js"
 import { MemberBody } from "../../schemas/memberSchemas.js"
 import { MemberRole } from "../../generated/prisma/enums.js"
 
+const memberSelect = {
+    role:true,
+    user: {
+        select: {id:true, name:true, email:true}
+    }
+}
+
 export const memberRepository = {
     getMembers: async (projectId: string) => {
         return await prisma.projectMember.findMany({
             where: { projectId},
-            include: {
-                user: {
-                    select: { id: true, email: true, name: true }
-                }
-            }
+            select: memberSelect
         })
     },
 
@@ -35,7 +38,8 @@ export const memberRepository = {
                     projectId,
                     userId,
                     role
-                }
+                },
+                select: memberSelect
             })
         } catch (e:unknown) {
             if (e instanceof Error && 'code' in e && e.code === "P2002") {
