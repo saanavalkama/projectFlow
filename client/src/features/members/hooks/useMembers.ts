@@ -4,6 +4,7 @@ import { memberServices } from "../services/memberServices"
 export const useMembers = (projectId: string) => {
     return useQuery({
         queryKey:['members',projectId],
-        queryFn: () => memberServices.getMembers(projectId)
+        queryFn: () => memberServices.getMembers(projectId),
+        staleTime:1000 * 60
     })
 }

@@ -23,6 +23,7 @@ export const useCreateTask = () => {
         },
         onSuccess: (_,{projectId}) => {
             queryClient.invalidateQueries({queryKey:['tasks',projectId]})
+            queryClient.invalidateQueries({queryKey:['activityLog',projectId]})
             toast.success("Task created successfully!")
         }, 
         onError: (error) => {
@@ -38,6 +39,7 @@ export const useUpdateTaskStatus = () => {
         onSuccess:(_,{projectId, id})=>{
             queryClient.invalidateQueries({queryKey:['tasks',projectId]})
             queryClient.invalidateQueries({queryKey:['task', id]})
+            queryClient.invalidateQueries({queryKey:['activityLog',projectId]})
             toast.success("Task status updated successfully!")
         },
         onError: (error) => {
@@ -68,6 +70,7 @@ export const useAssingTask = () => {
         onSuccess:(_,{id,projectId})=> {
           queryClient.invalidateQueries({queryKey:['task',id]})
           queryClient.invalidateQueries({queryKey:["tasks", projectId]})
+          queryClient.invalidateQueries({queryKey:['activityLog',projectId]})
           toast.success("Assigned to the task")
         },
         onError:(err)=> toast.error(getErrorMessage(err,"Assigning to the task failed"))
@@ -81,6 +84,7 @@ export const useUnassignFromTask = () => {
         onSuccess: (_,{projectId,id}) => {
             queryClient.invalidateQueries({queryKey:['task',id]})
             queryClient.invalidateQueries({queryKey:['tasks',projectId]})
+            queryClient.invalidateQueries({queryKey:['activityLog',projectId]})
             toast.success("Unassigned from task")
         },
         onError: (err) => toast.error(getErrorMessage(err,"Unable to unassign from task"))

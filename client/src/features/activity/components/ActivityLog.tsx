@@ -2,17 +2,8 @@ import type { ActivityLog } from "@/features/projects/types/types"
 import { useActivity } from "../hooks/useActivity"
 import { BounceLoader } from "react-spinners"
 import { ActivityIcon } from "lucide-react"
+import type { MetaData } from "@/features/projects/types/types"
 
-interface MetaData{
-    whoAdded?: string,
-    addedMember?:string,
-    taskName?:string,
-    createdBy?: string,
-    status?: string,
-    changedBy?:string,
-    assignee?:string,
-    unassignee?:string
-}
 
 const activityMessageFactory : Record<string, (meta:MetaData) => string> = {
     MEMBER_ADDED:(meta:MetaData)=>`${meta.addedMember} joined the project! (Added by ${meta.whoAdded})`,

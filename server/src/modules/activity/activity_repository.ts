@@ -26,7 +26,8 @@ export const activityRepository = {
 
         return prisma.activityLog.findMany({
            where: {projectId, createdAt:{gte:sevenDaysAgo}},
-           orderBy: {createdAt:'desc'} 
+           orderBy: {createdAt:'desc'},
+           take:20
         })
     }
 }

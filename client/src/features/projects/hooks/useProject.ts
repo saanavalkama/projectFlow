@@ -7,6 +7,7 @@ export const useProject = (id:string | undefined) => {
         queryFn: () => {
             return projectServices.getProjectById(id as string)
         },
-        enabled:!!id
+        enabled:!!id,
+        staleTime: 1000 * 60 * 5
     })
 }

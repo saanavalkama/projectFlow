@@ -11,7 +11,8 @@ export const useAddMemberMutations = () => {
         onSuccess: (newMember, {projectId}) => {
             queryClient.setQueryData(['members', projectId],(old:MemberResponse[])=>{
                 return [...(old ?? []), newMember]
-            })
+            }),
+            queryClient.invalidateQueries({queryKey:['activityLog',projectId]})
             toast.success("New member added to project")
         },
         onError: (err)=>{

@@ -6,7 +6,8 @@ export const useTasks = (projectId: string, status?: TaskStatus, search?: string
     return useQuery({
         queryKey: ['tasks', projectId, status, search],
         queryFn: () => taskServices.getTasksByProjectId(projectId, status, search),
-        enabled: !!projectId
+        enabled: !!projectId,
+        staleTime: 1000 * 30
     })
 }
 
@@ -14,6 +15,7 @@ export const useTask = (projectId: string | undefined, taskId: string | undefine
     return useQuery({
         queryKey: ['task', taskId],
         queryFn: () => taskServices.getTaskById(projectId as string, taskId as string),
-        enabled: !!projectId && !!taskId
+        enabled: !!projectId && !!taskId,
+        staleTime: 1000 * 30
     })
 }

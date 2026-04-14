@@ -15,7 +15,7 @@ export const useMe = () => {
             throw err
         }
     },
-    staleTime: Infinity,
+    staleTime: 1000 * 60 * 10,
     retry: false,
   })
 }

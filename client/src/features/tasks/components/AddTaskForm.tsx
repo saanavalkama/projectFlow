@@ -1,6 +1,6 @@
 import { useForm, Controller } from "react-hook-form"
 import type { SubmitHandler } from "react-hook-form"
-import type { NewTask } from "../types/types"
+import type { NewTask, TaskPriority } from "../types/types"
 import { useCreateTask } from "../hooks/useTaskMutations"
 import {Field, FieldLabel} from "@/components/ui/field"
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
@@ -9,6 +9,12 @@ import { Button } from "@/components/ui/button"
 import FormInput from "../../ui/FormInput"
 import {format} from "date-fns"
 import FormTextArea from "@/features/ui/FormTextArea"
+
+const PRIORITIES: { value: TaskPriority; label: string; color: string }[] = [
+    { value: "LOW",    label: "Low",    color: "bg-blue-500/20 text-blue-300 border-blue-500/40 hover:bg-blue-500/30" },
+    { value: "MEDIUM", label: "Medium", color: "bg-yellow-500/20 text-yellow-300 border-yellow-500/40 hover:bg-yellow-500/30" },
+    { value: "HIGH",   label: "High",   color: "bg-red-500/20 text-red-300 border-red-500/40 hover:bg-red-500/30" },
+]
 
 
 type AddTaskFormProps = {
@@ -53,6 +59,28 @@ export default function AddTaskForm({projectId, setIsTaskFormOpen}:AddTaskFormPr
                   name="details"
                   registration={register("details")}
                   errorMsg={errors.details?.message}
+                />
+                <Controller
+                    control={control}
+                    name="priority"
+                    defaultValue="MEDIUM"
+                    render={({ field }) => (
+                        <Field className="mx-auto w-44">
+                            <FieldLabel>Priority</FieldLabel>
+                            <div className="flex gap-2">
+                                {PRIORITIES.map(({ value, label, color }) => (
+                                    <button
+                                        key={value}
+                                        type="button"
+                                        onClick={() => field.onChange(value)}
+                                        className={`flex-1 rounded border px-2 py-1 text-xs font-medium transition-colors ${color} ${field.value === value ? "ring-2 ring-offset-1 ring-offset-transparent ring-white/30" : "opacity-60"}`}
+                                    >
+                                        {label}
+                                    </button>
+                                ))}
+                            </div>
+                        </Field>
+                    )}
                 />
                 <Controller
                     control={control}
