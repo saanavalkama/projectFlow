@@ -9,6 +9,7 @@ import Tasks from "@/features/tasks/components/Tasks"
 import { useMe } from "@/features/auth/hooks/useAuthQueries"
 import MemberList from "@/features/members/components/MemberList"
 import AddMemberForm from "@/features/members/components/AddMemberForm"
+import ActivityLogList from "@/features/activity/components/ActivityLog"
 
 export default function ProjectDetailPage(){
 
@@ -38,8 +39,13 @@ export default function ProjectDetailPage(){
                 <MemberList projectId={project.id} isOwner={isOwner} />
                 {isOwner && <AddMemberForm projectId={projectId} />}
             </div>
-            <div className="w-1/2 h-full">
-                <Tasks projectId={projectId} />
+            <div className="w-1/2 h-full flex flex-col gap-5">
+                <div className="flex-2 overflow-hidden">
+                    <Tasks projectId={projectId} />
+                </div>
+                <div className="flex-1 overflow-hidden">
+                    <ActivityLogList projectId={projectId} />
+                </div>
             </div>
           </div>
         </div>

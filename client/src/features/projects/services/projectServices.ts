@@ -1,5 +1,6 @@
 import {api} from "../../../lib/api";
 import type { Project, NewProject } from "../types/types";
+import type { ActivityLog } from "../types/types";
 
 
 export const projectServices = {
@@ -11,8 +12,8 @@ export const projectServices = {
         
     },
 
-    getAllProjects: async () : Promise<Project[]> => {
-        const response = await api.get<Project[]>("/projects")
+    getAllProjects: async (query?: "ALL" | "OWN" | "MEMBER") : Promise<Project[]> => {
+        const response = await api.get<Project[]>("/projects", { params: query ? { query } : undefined })
         return response.data
     },
 
@@ -29,5 +30,7 @@ export const projectServices = {
         const payload = {...data, description: data.description ?? ""}
         const response = await api.put<Project>(`/projects/${id}`, payload)
         return response.data
-    }
+    },
+
+   
 }

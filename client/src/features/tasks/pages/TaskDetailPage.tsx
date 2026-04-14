@@ -3,8 +3,10 @@ import { useParams } from "react-router-dom"
 import TaskDetailBar from "../components/TaskDetailBar"
 import { BounceLoader } from "react-spinners"
 import TaskDetailCard from "../components/TaskDetailCard"
+import TaskAssigneeCard from "../components/TaskAssigneeCard"
 import { Calendar } from '@/components/ui/calendar'
 import { getDuedateInfo } from "../utils/getDueDateInfo"
+import { useMe } from "@/features/auth/hooks/useAuthQueries"
 
 
 export default function TaskDetailPage(){
@@ -12,24 +14,33 @@ export default function TaskDetailPage(){
     const {taskId,projectId} = useParams()
 
     const {data:task, isPending, isError} = useTask(projectId, taskId)
+    const {data:me} = useMe()
 
     if(!taskId || !projectId) return <div>something went wrong</div>
     if(isPending) return <BounceLoader />
     if(isError) return <div>Something went wrong while fetching task</div>
+    if(!me) return <div>Unathorized</div>
     
     const {text, className} = getDuedateInfo(task.dueDate)
+
+    const isWorking = task.taskAssignees.some(a => a.userId === me?.id)
     
     return(
         <div className="flex w-full flex-col h-screen">
             <div className="max-w-xl mx-auto w-full self-center">
               <TaskDetailBar name={task.title} />
             </div>
+            <div>
+              {isWorking ? <p>you are working on this task</p> : <p>you are not working on this task</p>}
+            </div>
             <div className="flex flex-row w-full">
-                <div className="w-1/2">
+                <div className="w-1/2 flex flex-col gap-4">
                     <TaskDetailCard
-                      task={task} 
+                      task={task}
                       projectId={projectId}
+                      userId={me.id}
                     />
+                    <TaskAssigneeCard assignees={task.taskAssignees} />
                 </div>
                 <div className="w-1/2">
                   <p className={`text-sm font-medium mt-2 text ${className}`}>
