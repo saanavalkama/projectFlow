@@ -32,20 +32,13 @@ export const memberRepository = {
     },
 
     addMember: async (projectId: string, userId: string, role: MemberRole) => {
-        try {
-            return await prisma.projectMember.create({
-                data: {
-                    projectId,
-                    userId,
-                    role
-                },
-                select: memberSelect
-            })
-        } catch (e:unknown) {
-            if (e instanceof Error && 'code' in e && e.code === "P2002") {
-                throw new ConflictError("User is already a member of this project")
-            }
-            throw e
-        }
+        return await prisma.projectMember.create({
+            data: {
+                projectId,
+                userId,
+                role
+            },
+            select: memberSelect
+        })  
     }
 }

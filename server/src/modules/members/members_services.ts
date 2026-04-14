@@ -3,6 +3,9 @@ import { MemberBody, UpdateMemberRole } from "../../schemas/memberSchemas.js"
 import { userRepository } from "../auth/user_repository.js"
 import { projectRepository } from "../projects/project_repository.js"
 import { memberRepository } from "./members_repository.js"
+import {prisma} from '../../lib/prisma.js'
+import { activityRepository } from "../activity/activity_repository.js"
+import { LogAction } from "../../generated/prisma/enums.js"
 
 export const memberServices = {
     getMembers: async (projectId: string) => {
@@ -25,12 +28,28 @@ export const memberServices = {
         return await memberRepository.removeMember(projectId, userId)
     },
 
-    addMember: async (projectId: string, data: MemberBody) => {
+    addMember: async (projectId: string,userName: string, data: MemberBody) => {
         
+        //add new member logic
+
         const user = await userRepository.findByEmail(data.email)
         if(!user) throw new NotFoundError("User")
 
-        return await memberRepository.addMember(projectId, user.id, data.role )
+        const member = await memberRepository.addMember(projectId, user.id, data.role )
+        //log logic
+
+        try{
+            await activityRepository.createLog({
+                action: LogAction.MEMBER_ADDED,
+                projectId,
+                metadata: {whoAdded: userName, addedMember: user.name, }
+            })
+        } catch(err){
+            console.error(err)
+        }
+        
+
+        return member
 
 
     }

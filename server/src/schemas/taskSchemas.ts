@@ -19,6 +19,12 @@ export const projectTaskParamsSchema = z.object({
     id: z.string().uuid()
 })
 
+export const projectTaskUserParamSchema = z.object({
+    id:z.string().uuid(),
+    projectId:z.string().uuid(),
+    userId: z.string().uuid()
+})
+
 export const projectIdParamSchema = z.object({
     projectId: z.string().uuid()
 })
@@ -31,3 +37,4 @@ export const taskQuerySchema = z.object({
 export type NewTask = z.infer<typeof createTaskSchema>
 export type UpdateTaskStatus = z.infer<typeof updateTaskStatusSchema>
 export type TaskQuery = z.infer<typeof taskQuerySchema>
+export type ProjectTaskUserParams = z.infer<typeof projectTaskUserParamSchema>

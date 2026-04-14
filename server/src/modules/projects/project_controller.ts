@@ -1,5 +1,5 @@
 import { UnauthorizedError } from "../../errors/AppError.js";
-import { ProjectBody } from "../../schemas/projectSchemas.js";
+import { ProjectBody, ProjectQuery } from "../../schemas/projectSchemas.js";
 import { projectServices } from "./project_services.js";
 import { Request, Response } from "express";
 
@@ -22,7 +22,8 @@ export const projectController = {
     getAllProjects: async (req: Request, res: Response) => {
         const userId = req.session.userId
         if(!userId) throw new UnauthorizedError('not logged in')
-        const projects = await projectServices.getAllProjects(userId)
+        const query = req.query as ProjectQuery
+        const projects = await projectServices.getAllProjects(userId, query)
         return res.status(200).json(projects)
     },
 

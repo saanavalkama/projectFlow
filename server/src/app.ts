@@ -3,6 +3,7 @@ import express from 'express'
 import projectRoutes from './modules/projects/project_routes.js'
 import taskRoutes from './modules/tasks/task_routes.js'
 import memberRoutes from './modules/members/members_routes.js'
+import activityRoutes from "./modules/activity/activity_routes.js"
 import cors from 'cors'
 import { env } from './config/env.js'
 import { errorHandler } from './middleware/errorHandler.js'
@@ -27,6 +28,7 @@ app.use('/projects', memberRoutes)
 app.use("/", taskRoutes)
 app.use("/", statRoutes)
 app.use("/",authRoutes)
+app.use("/",activityRoutes)
 
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'working'})

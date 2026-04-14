@@ -1,5 +1,5 @@
 import { NotFoundError } from "../../errors/AppError.js";
-import { ProjectBody} from "../../schemas/projectSchemas.js";
+import { ProjectBody, ProjectQuery} from "../../schemas/projectSchemas.js";
 import {projectRepository} from "./project_repository.js";
 
 export const projectServices = {
@@ -7,8 +7,8 @@ export const projectServices = {
         return await projectRepository.createProject(data, ownerId)
     },
 
-    getAllProjects: async (userId: string) => {
-        return await projectRepository.getAllProjects(userId)
+    getAllProjects: async (userId: string, query: ProjectQuery) => {
+        return await projectRepository.getAllProjects(userId,query)
     },
 
     deleteProject: async (id: string) => {

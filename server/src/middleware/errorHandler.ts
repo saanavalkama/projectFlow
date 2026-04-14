@@ -11,6 +11,9 @@ export function errorHandler(err: unknown, req: Request, res: Response, next: Ne
        if(err.code === 'P2025') {
         return res.status(404).json({ error: 'Resource not found' })
        }
+       if(err.code === "P2002"){
+        return res.status(409).json({error:'Resource already exists'})
+       }
     }
 
     console.error('Unexpected error:', err)
