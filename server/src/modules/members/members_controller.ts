@@ -24,9 +24,11 @@ export const memberController = {
     },
 
     addMember: async (req: Request, res: Response) => {
+        const userName = req.session.username
+        if(!userName) throw new UnauthorizedError("User must. be logged in")
         const { projectId } = req.params as { projectId: string }
         const data = req.body as MemberBody
-        const member = await memberServices.addMember(projectId, data)
+        const member = await memberServices.addMember(projectId, userName, data)
         return res.status(201).json(member)
     }
 }

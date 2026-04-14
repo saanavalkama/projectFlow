@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { taskController } from "./task_controller.js";
 import { validate } from "../../middleware/validation.js";
-import { createTaskSchema, projectIdParamSchema, projectTaskParamsSchema, taskQuerySchema, updateTaskStatusSchema } from "../../schemas/taskSchemas.js";
+import { createTaskSchema, projectIdParamSchema, projectTaskParamsSchema, projectTaskUserParamSchema, taskQuerySchema, updateTaskStatusSchema } from "../../schemas/taskSchemas.js";
 import { requireAuth } from "../../middleware/requireAuth.js";
 import { requireTaskAccess } from "../../middleware/requireTaskAccess.js";
 import { requireRole } from "../../middleware/requireRole.js";
@@ -47,6 +47,23 @@ router.get(
     validate(projectTaskParamsSchema, "params"),
     requireTaskAccess,
     taskController.getTaskById
+)
+
+router.post(
+    "/projects/:projectId/tasks/:id/assign",
+    requireAuth,
+    validate(projectTaskParamsSchema, "params"),
+    requireTaskAccess,
+    taskController.assignToTask
+)
+
+router.delete(
+    "/projects/:projectId/tasks/:id/assignees/:userId",
+    requireAuth,
+    validate(projectTaskUserParamSchema,"params"),
+    requireTaskAccess,
+    taskController.unassignFromTask
+
 )
 
 export default router

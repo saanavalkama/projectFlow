@@ -1,5 +1,5 @@
 import {api} from "../../../lib/api";
-import type { Task, NewTask, UpdateTaskStatusInput, TaskStatus } from "../types/types";
+import type { Task, TaskWithAssignees, NewTask, UpdateTaskStatusInput, TaskStatus, TaskAssignee } from "../types/types";
 
 export const taskServices = {
 
@@ -15,8 +15,8 @@ export const taskServices = {
         return response.data
     },
 
-    getTaskById: async (projectId: string, id: string): Promise<Task> => {
-        const response = await api.get<Task>(`/projects/${projectId}/tasks/${id}`)
+    getTaskById: async (projectId: string, id: string): Promise<TaskWithAssignees> => {
+        const response = await api.get<TaskWithAssignees>(`/projects/${projectId}/tasks/${id}`)
         return response.data
     },
 
@@ -27,5 +27,14 @@ export const taskServices = {
 
     deleteTask: async (projectId: string, id: string): Promise<void> => {
         return await api.delete(`/projects/${projectId}/tasks/${id}`)
+    },
+
+    assignToTask: async(projectId: string, id:string):Promise<TaskAssignee> => {
+        const response = await api.post<TaskAssignee>(`/projects/${projectId}/tasks/${id}/assign`)
+        return response.data
+    },
+
+    unassignFromTask: async(projectId:string, id:string, userId:string) => {
+         await api.delete(`/projects/${projectId}/tasks/${id}/assignees/${userId}`)
     }
 }

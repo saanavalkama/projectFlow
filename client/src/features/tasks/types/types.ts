@@ -27,3 +27,18 @@ export interface DeleteTaskInput{
     projectId: string, 
     id:string
 }
+
+export interface TaskAssignee{
+    id:string,
+    taskId:string,
+    userId:string
+    user: {
+        id: string,
+        name: string,
+        email: string
+    }
+}
+
+export interface TaskWithAssignees extends Task {
+    taskAssignees: TaskAssignee[]
+}

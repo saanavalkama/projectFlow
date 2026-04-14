@@ -16,7 +16,6 @@ export default function TaskStatusPicker({status, id, projectId} :TaskStatusPick
         changeStatus({projectId, id, status})
     }
 
-    if(isError) return <div>something went wrong while updating the task status</div>
     if(isPending) return <BounceLoader />
 
     const statuses = [
@@ -28,6 +27,7 @@ export default function TaskStatusPicker({status, id, projectId} :TaskStatusPick
     return(
         <div>
             <h3>Check status</h3>
+            {isError && <div>Couldn't update status. Make sure you are task assignee</div>}
             <div>
                 {statuses.map((s)=>(
                   <button

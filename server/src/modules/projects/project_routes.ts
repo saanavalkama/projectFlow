@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { projectController } from "./project_controller.js";
 import { validate } from "../../middleware/validation.js";
-import { idParamSchema, projectBodySchema } from "../../schemas/projectSchemas.js";
+import { idParamSchema, projectBodySchema, projectQuerySchema } from "../../schemas/projectSchemas.js";
 import { requireAuth } from "../../middleware/requireAuth.js";
 import { requireOwner } from "../../middleware/requireOwner.js";
 
@@ -17,6 +17,7 @@ router.post(
 router.get(
     "/", 
     requireAuth,
+    validate(projectQuerySchema,"query"),
     projectController.getAllProjects
 )
 
