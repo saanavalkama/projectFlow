@@ -1,4 +1,4 @@
-import { ForbiddenError, NotFoundError } from "../../errors/AppError.js"
+import { ConflictError, ForbiddenError, NotFoundError } from "../../errors/AppError.js"
 import { MemberBody, UpdateMemberRole } from "../../schemas/memberSchemas.js"
 import { userRepository } from "../auth/user_repository.js"
 import { projectRepository } from "../projects/project_repository.js"
@@ -35,7 +35,11 @@ export const memberServices = {
         const user = await userRepository.findByEmail(data.email)
         if(!user) throw new NotFoundError("User")
 
+        const existing = await memberRepository.getMemberByUserId(user.id,projectId)
+        if(existing) throw new ConflictError("User already a member")
+
         const member = await memberRepository.addMember(projectId, user.id, data.role )
+        
         //log logic
 
         try{

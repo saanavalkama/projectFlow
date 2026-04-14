@@ -40,5 +40,12 @@ export const memberRepository = {
             },
             select: memberSelect
         })  
+    },
+
+    getMemberByUserId: async(userId:string, projectId:string) => {
+        return await prisma.projectMember.findUnique({
+            where: {userId_projectId: {userId,projectId}}
+        }
+        )
     }
 }

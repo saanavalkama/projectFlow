@@ -39,13 +39,21 @@ model Task{
   createdBy User @relation(fields:[createdById], references:[id])
   taskAssignees TaskAssignee[]
   reminderSendAt DateTime?
-  
+  @@index([projectId])
+  @@index([projectId, status])
+  priority TaskPriority @default(MEDIUM)
 }
 
 enum TaskStatus {
   TODO
   IN_PROGRESS
   DONE
+}
+
+enum TaskPriority{
+  LOW
+  MEDIUM
+  HIGH
 }
 
 model User{
@@ -74,7 +82,9 @@ model ProjectMember{
   user User @relation(fields:[userId], references:[id], onDelete:Cascade)
   project Project @relation(fields:[projectId], references:[id], onDelete:Cascade)
   @@unique([userId, projectId])
+  @@index([projectId])
 }
+
 
 model TaskAssignee{
   id String @id @default(uuid())
@@ -83,6 +93,7 @@ model TaskAssignee{
   user User @relation(fields:[userId],references:[id],onDelete:Cascade)
   task Task @relation(fields:[taskId], references:[id], onDelete:Cascade)
   @@unique([userId, taskId])
+  @@index([taskId])
 }
 
 model ActivityLog{
@@ -92,6 +103,8 @@ model ActivityLog{
   action LogAction
   metadata Json
   project Project @relation(fields:[projectId],references:[id], onDelete:Cascade)
+  @@index([projectId])
+  @@index([projectId, createdAt])
 }
 
 enum LogAction{

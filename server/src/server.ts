@@ -3,6 +3,7 @@ import "dotenv/config"
 import {app} from './app.js'
 import {prisma} from './lib/prisma.js'
 import { env } from "./config/env.js";
+import { startReminderJob } from "./jobs/reminderJob.js";
 
 const PORT = env.PORT 
 
@@ -11,6 +12,7 @@ async function startServer() {
 
     try{
         await prisma.$connect()
+        startReminderJob()
         console.log('Connected to the database successfully.')
 
         const server = app.listen(PORT, () => {
@@ -33,6 +35,8 @@ async function startServer() {
         console.error('Error during server startup:', error)
         process.exit(1)
     }
+
+    
 }
 
 void startServer()

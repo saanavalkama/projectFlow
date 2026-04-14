@@ -11,10 +11,13 @@ export interface Task{
 
 export type TaskStatus = "TODO" | "IN_PROGRESS" | "DONE"
 
+export type TaskPriority = "LOW" | "MEDIUM" | "HIGH"
+
 export interface NewTask{
     title: string;
     details?: string;
     dueDate?: string;
+    priority?: TaskPriority;
 }
 
 export interface UpdateTaskStatusInput{

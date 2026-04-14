@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { requireAuth } from "../../middleware/requireAuth.js";
-import { requireProjectAccess } from "../../middleware/requireProjectAcccess.js";
+import { requireProjectAccess } from "../../middleware/requireProjectAccess.js";
 import { projectIdParamSchema } from "../../schemas/taskSchemas.js";
 import { validate } from "../../middleware/validation.js";
 import { activityController } from "./activity_controller.js";

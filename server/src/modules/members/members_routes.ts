@@ -5,7 +5,7 @@ import { memberBodySchema, memberParamsSchema, updateMemberRoleSchema } from "..
 import { projectIdParamSchema } from "../../schemas/taskSchemas.js"
 import { requireAuth } from "../../middleware/requireAuth.js"
 import { requireOwner } from "../../middleware/requireOwner.js"
-import { requireProjectAccess } from "../../middleware/requireProjectAcccess.js"
+import { requireProjectAccess } from "../../middleware/requireProjectAccess.js"
 
 const router = Router()
 

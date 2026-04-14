@@ -17,7 +17,7 @@ export interface ActivityLog {
     createdAt:string,
     projectId:string,
     action:LogAction
-    metadata: object,
+    metadata: MetaData,
 }
 
 export type LogAction = 
@@ -25,3 +25,13 @@ export type LogAction =
     "TASK_ASSIGNED" | "TASK_UNASSIGNED" | "TASK_DUE_SOON"
 
 
+export interface MetaData{
+    whoAdded?: string,
+    addedMember?:string,
+    taskName?:string,
+    createdBy?: string,
+    status?: string,
+    changedBy?:string,
+    assignee?:string,
+    unassignee?:string
+}

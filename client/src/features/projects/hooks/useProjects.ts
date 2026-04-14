@@ -7,6 +7,7 @@ export const useProjects = (filter: ProjectFilter = "ALL") => {
     return useQuery({
         queryKey: ['projects', filter],
         queryFn: () => projectServices.getAllProjects(filter),
+        staleTime: 1000  * 60 * 5
     })
 }
 
